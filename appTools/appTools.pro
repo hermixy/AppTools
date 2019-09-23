@@ -15,42 +15,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-SOURCES += \
-    CustomWidget.cpp \
-    SerialWidget.cpp \
-    TcpWidget.cpp \
-    appCfg.cpp \
-    crc.cpp \
-    floatcvn.cpp \
-    main.cpp \
-    mainwindow.cpp
-
-HEADERS += \
-    CustomWidget.h \
-    SerialWidget.h \
-    TcpWidget.h \
-    appCfg.h \
-    binaryCvn.h \
-    crc.h \
-    floatcvn.h \
-    mainwindow.h \
-    myHelper.h
-
-FORMS += \
-    CustomWidget.ui \
-    SerialWidget.ui \
-    TcpWidget.ui \
-    crc.ui \
-    floatcvn.ui \
-    mainwindow.ui
-
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-RESOURCES += \
-    rc.qrc
 
 # Output directory
 CONFIG(debug, debug|release) {
@@ -66,3 +34,9 @@ OBJECTS_DIR = $$output
 MOC_DIR     = $$output
 RCC_DIR     = $$output
 UI_DIR      = $$output
+
+include(helper/helper.pri)
+include(ui/ui.pri)
+
+SOURCES += \
+    main.cpp

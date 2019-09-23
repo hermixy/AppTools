@@ -1,6 +1,6 @@
-#include "mainwindow.h"
-#include "myHelper.h"
-//#include "floatcvn.h"
+#include "ui/mainwindow.h"
+#include "helper/myHelper.h"
+//#include "ui/floatcvn.h"
 
 #include <QApplication>
 

@@ -1,6 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "myHelper.h"
+#include "helper/myHelper.h"
 #include "SerialWidget.h"
 #include "TcpWidget.h"
 #include "CustomWidget.h"

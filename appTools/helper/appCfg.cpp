@@ -25,10 +25,10 @@ QString appCfg::Data="";
 
 void appCfg::readconfig()
 {
-//    if (!checkconfig()) {
-//        qDebug()<<"check error";
-//        return;
-//    }
+    if (!checkconfig()) {
+        qDebug()<<"check error";
+        return;
+    }
 
     QString fileName = QString("%1/config.ini").arg(AppPath);
     QSettings set(fileName, QSettings::IniFormat);
@@ -89,7 +89,7 @@ void appCfg::newconfig()
     writeconfig();
 }
 
-/*
+
 bool appCfg::checkconfig()
 {
     QString fileName = QString("%1/config.ini").arg(AppPath);
@@ -102,45 +102,9 @@ bool appCfg::checkconfig()
         newconfig();
         return false;
     }
-
-    //如果配置文件不完整,则以初始值继续运行,并生成配置文件
-    if (file.open(QFile::ReadOnly))
-    {
-        bool ok = true;
-
-        while (!file.atEnd()) {//如果到达文件的末尾，返回true;否则返回false（！）。
-            QString line = file.readLine();
-            //这个函数从设备中读取一行ASCII字符，最大可达maxSize - 1字节，将字符存储在数据中，
-            //并返回读取的字节数。如果不能读取一行但没有错误，则此函数返回0。如果发生错误，该函数返回可以读取的长度，
-            //如果没有读取，则返回-1。
-            line = line.replace("\r", "");//去掉回车
-            line = line.replace("\n", "");//去掉换行
-            QStringList list = line.split("=");//分裂等号前后字符串
-
-            if (list.count() == 2)
-            {//返回列表中出现值的次数
-                if (list.at(1) == "")
-                {//返回第一个元素
-                    ok = false;
-                    break;
-                }
-            }
-        }
-        if (!ok)
-        {
-            newconfig();
-            qDebug()<<"read failed";
-            return false;
-        }
-    }
-    else
-    {
-        newconfig();
-        return false;
-    }
     return true;
 }
-*/
+
 void appCfg::writeerror(QString str)
 {
     QString fileName = QString("%1/Error_%2.txt").arg(AppPath).arg(QDATE);

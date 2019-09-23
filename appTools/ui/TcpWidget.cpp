@@ -1,8 +1,8 @@
-﻿#include "myHelper.h"
-#include "appCfg.h"
+﻿#include "helper/myHelper.h"
+#include "helper/appCfg.h"
 #include "TcpWidget.h"
 #include "ui_TcpWidget.h"
-#include "binaryCvn.h"
+#include "helper/binaryCvn.h"
 
 #include <QNetworkInterface>
 #include <QTcpSocket>

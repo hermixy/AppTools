@@ -29,7 +29,7 @@ public:
     static void readconfig();           //读取配置文件,在main函数最开始加载程序载入
     static void writeconfig();          //写入配置文件,在更改配置文件程序关闭时调用
     static void newconfig();            //以初始值新建配置文件
-    //static bool checkconfig();          //校验配置文件
+    static bool checkconfig();          //校验配置文件
     static void writeerror(QString str);//写入错误信息
     static void newdir(QString dirname);//新建目录
 

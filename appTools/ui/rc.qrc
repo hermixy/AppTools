@@ -46,6 +46,8 @@
         <file>ico/checkbox-unchecked-selected@2.png</file>
         <file>ico/combobox-arrow.png</file>
         <file>ico/combobox-arrow@2.png</file>
+        <file>ico/minus.png</file>
+        <file>ico/plus.png</file>
         <file>ico/radio-checked.png</file>
         <file>ico/radio-checked@2.png</file>
         <file>ico/radio-checked-dark.png</file>
@@ -199,7 +201,5 @@
         <file>ico/titlebutton-restore-hover-alt.png</file>
         <file>ico/titlebutton-restore-hover-alt@2.png</file>
         <file>qss/mac.css</file>
-        <file>ico/minus.png</file>
-        <file>ico/plus.png</file>
     </qresource>
 </RCC>

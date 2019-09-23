@@ -1,6 +1,6 @@
 #include "floatcvn.h"
 #include "ui_floatcvn.h"
-#include "binaryCvn.h"
+#include "helper/binaryCvn.h"
 
 FloatCvn::FloatCvn(QWidget *parent) :
     QWidget(parent),
