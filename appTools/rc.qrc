@@ -198,10 +198,6 @@
         <file>ico/titlebutton-restore-hover@2.png</file>
         <file>ico/titlebutton-restore-hover-alt.png</file>
         <file>ico/titlebutton-restore-hover-alt@2.png</file>
-        <file>ico/toggle-off.svg</file>
-        <file>ico/toggle-off-disabled.svg</file>
-        <file>ico/toggle-on.svg</file>
-        <file>ico/toggle-on-disabled.svg</file>
         <file>qss/mac.css</file>
         <file>ico/minus.png</file>
         <file>ico/plus.png</file>

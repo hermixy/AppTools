@@ -19,8 +19,9 @@ public:
         return ufi.i;
     }
 
-    static float ByteToFloat(unsigned int* a)//使用取地址的方法进行处理
+    static float ByteToFloat(unsigned char* a)//使用取地址的方法进行处理
     {
+        //return *((float*)a);
         return *(reinterpret_cast<float*>(a));
     }
 

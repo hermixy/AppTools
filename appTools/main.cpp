@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "myHelper.h"
+//#include "floatcvn.h"
 
 #include <QApplication>
 
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
     set();
 
     MainWindow w;
+    //FloatCvn w;
     w.show();
     return a.exec();
 }

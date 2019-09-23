@@ -15,6 +15,11 @@ public:
     explicit FloatCvn(QWidget *parent = nullptr);
     ~FloatCvn();
 
+private slots:
+    void on_convHex_clicked();
+
+    void on_convFlaot_clicked();
+
 private:
     Ui::FloatCvn *ui;
 };

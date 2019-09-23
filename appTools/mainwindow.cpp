@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,Frm(nullptr)
+    ,sizeGrip(nullptr)
 {
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
@@ -25,6 +26,16 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    if(sizeGrip!=nullptr)
+    {
+        delete sizeGrip;
+        sizeGrip=nullptr;
+    }
+    if(Frm!=nullptr)
+    {
+        delete Frm;
+        Frm=nullptr;
+    }
     delete ui;
 }
 
@@ -43,12 +54,12 @@ void MainWindow::initWindow()
     ui->label->setText("AppTools");
     ui->labelicon->setPixmap(QPixmap(":/ico/setting-icon-dark.png"));
 
-    Frm=new CustomWidget(QString("你好呀!"));
+    Frm=new CustomWidget(QString("你好呀!"),this);
     if(Frm!=nullptr)
     {
         ui->stackedWidget->addWidget(Frm);
         ui->stackedWidget->setCurrentWidget(Frm);
-        Frm->setAttribute(Qt::WA_DeleteOnClose,true);
+        //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
 
@@ -136,16 +147,16 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
         Frm=nullptr;
     }
     if(className=="串口助手")
-        Frm = new serial();
+        Frm = new serial(this);
     else if(className=="TCP助手")
-        Frm=new tcp();
+        Frm=new tcp(this);
     else if(className=="浮点数转换助手")
-        Frm=new FloatCvn();
+        Frm=new FloatCvn(this);
     if(Frm!=nullptr)
     {
         ui->stackedWidget->addWidget(Frm);
         ui->stackedWidget->setCurrentWidget(Frm);
-        Frm->setAttribute(Qt::WA_DeleteOnClose,true);
+        //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
 
