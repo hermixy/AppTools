@@ -1,7 +1,7 @@
 HEADERS += \
-    $$PWD/appCfg.h \
-    $$PWD/binaryCvn.h \
+    $$PWD/AppCfg.h \
+    $$PWD/BinaryCvn.h \
     $$PWD/myHelper.h
            
 SOURCES += \
-	$$PWD/appCfg.cpp
+    $$PWD/AppCfg.cpp

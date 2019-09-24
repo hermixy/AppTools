@@ -1,13 +1,13 @@
 ﻿#include "SerialWidget.h"
 #include "ui_SerialWidget.h"
 #include "helper/myHelper.h"
-#include "helper/binaryCvn.h"
-#include "helper/appCfg.h"
+#include "helper/BinaryCvn.h"
+#include "helper/AppCfg.h"
 #include <QSerialPortInfo>
 
 #pragma execution_character_set("utf-8")
 
-serial::serial(QWidget *parent) :
+SerialWidget::SerialWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::SerialWidget)
 {
@@ -20,13 +20,13 @@ serial::serial(QWidget *parent) :
     changeEnable(false);
 }
 
-serial::~serial()
+SerialWidget::~SerialWidget()
 {
     saveconfig();
     delete ui;
 }
 
-void serial::initdata()
+void SerialWidget::initdata()
 {
     ok=false;
     recvcount = 0;
@@ -34,7 +34,7 @@ void serial::initdata()
     waittime = 20;
 }
 
-void serial::initform()
+void SerialWidget::initform()
 {
     //查找可用的串口
     foreach(const QSerialPortInfo &info, QSerialPortInfo::availablePorts())
@@ -94,18 +94,18 @@ void serial::initform()
 
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    appCfg::readconfig();                          //读取配置
-    ui->baudrate->setCurrentIndex(ui->baudrate->findText(QString::number(appCfg::BaudRate)));
-    ui->stopbit->setCurrentIndex(ui->stopbit->findText(QString::number(appCfg::StopBit)));
-    ui->databit->setCurrentIndex(ui->databit->findText(QString::number(appCfg::DataBit)));
-    ui->checkbit->findText(appCfg::CheckData);
-    ui->hexsend->setChecked(appCfg::HexSend);
-    ui->hexrecv->setChecked(appCfg::HexRecv);
-    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(appCfg::AutoSendTime)));
-    ui->senddata->setText(appCfg::Data);
+    AppCfg::readconfig();                          //读取配置
+    ui->baudrate->setCurrentIndex(ui->baudrate->findText(QString::number(AppCfg::BaudRate)));
+    ui->stopbit->setCurrentIndex(ui->stopbit->findText(QString::number(AppCfg::StopBit)));
+    ui->databit->setCurrentIndex(ui->databit->findText(QString::number(AppCfg::DataBit)));
+    ui->checkbit->findText(AppCfg::CheckData);
+    ui->hexsend->setChecked(AppCfg::HexSend);
+    ui->hexrecv->setChecked(AppCfg::HexRecv);
+    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(AppCfg::AutoSendTime)));
+    ui->senddata->setText(AppCfg::Data);
 }
 
-void serial::builtconnect()
+void SerialWidget::builtconnect()
 {
     //打开串口
     connect(ui->openbtn,SIGNAL(clicked()),this,SLOT(openserial()));
@@ -129,7 +129,7 @@ void serial::builtconnect()
     });
 }
 
-void serial::openserial()
+void SerialWidget::openserial()
 {
     if(ui->openbtn->text()=="打开串口")
     {
@@ -178,7 +178,7 @@ void serial::openserial()
             changeEnable(true);
             append(2,"打开串口成功！");
             //连接信号槽
-            QObject::connect(myserial, &QSerialPort::readyRead, this, &serial::readData);
+            QObject::connect(myserial, &QSerialPort::readyRead, this, &SerialWidget::readData);
         }
         else
         {
@@ -197,7 +197,7 @@ void serial::openserial()
     }
 }
 
-void serial::readData()
+void SerialWidget::readData()
 {
     if (myserial->bytesAvailable() <= 0) {
         return;
@@ -214,9 +214,9 @@ void serial::readData()
     QString buffer;//储存数据
 
     if (ui->hexrecv->isChecked()) {
-        buffer = binaryCvn::byteArrayToHexStr(data);//16进制接受
+        buffer = BinaryCvn::byteArrayToHexStr(data);//16进制接受
     } else {
-        buffer = binaryCvn::byteArrayToAsciiStr(data);//ascii码接受
+        buffer = BinaryCvn::byteArrayToAsciiStr(data);//ascii码接受
     }
 
     append(1, buffer);
@@ -224,7 +224,7 @@ void serial::readData()
     ui->recvcountbtn->setText(QString("接收 : %1 字节").arg(recvcount));
 }
 
-void serial::sendData()
+void SerialWidget::sendData()
 {
     QString str = ui->senddata->toPlainText();
 
@@ -237,7 +237,7 @@ void serial::sendData()
     sendData(str);
 }
 
-void serial::sendData(QString data)
+void SerialWidget::sendData(QString data)
 {
     if (myserial == nullptr || !myserial->isOpen()) {//串口未打开
         return;
@@ -246,9 +246,9 @@ void serial::sendData(QString data)
     QByteArray buffer;
 
     if (ui->hexsend->isChecked()) {
-        buffer = binaryCvn::hexStrToByteArray(data);
+        buffer = BinaryCvn::hexStrToByteArray(data);
     } else {
-        buffer = binaryCvn::asciiStrToByteArray(data);
+        buffer = BinaryCvn::asciiStrToByteArray(data);
     }
 
     myserial->write(buffer);
@@ -257,13 +257,13 @@ void serial::sendData(QString data)
     ui->sendcountbtn->setText(QString("发送 : %1 字节").arg(sendcount));
 }
 
-void serial::changeEnable(bool b)
+void SerialWidget::changeEnable(bool b)
 {
     ui->autosend->setEnabled(b);
     ui->sendbtn->setEnabled(b);
 }
 
-void serial::on_autosend_stateChanged(int arg1)
+void SerialWidget::on_autosend_stateChanged(int arg1)
 {
     if (arg1 == 0)
         timesend->stop();
@@ -271,7 +271,7 @@ void serial::on_autosend_stateChanged(int arg1)
         timesend->start();
 }
 
-void serial::restart()
+void SerialWidget::restart()
 {
     if(ui->openbtn->text()=="打开串口")
         return;
@@ -329,7 +329,7 @@ void serial::restart()
         changeEnable(true);
         append(2,"串口更改设置成功！");
         //连接信号槽
-        QObject::connect(myserial, &QSerialPort::readyRead, this, &serial::readData);
+        QObject::connect(myserial, &QSerialPort::readyRead, this, &SerialWidget::readData);
         if(ui->autosend->isChecked())
             timesend->start();
     }
@@ -343,7 +343,7 @@ void serial::restart()
     }
 }
 
-void serial::autosendrestart()
+void SerialWidget::autosendrestart()
 {
     if (ui->autosend->isChecked()){
         timesend->stop();
@@ -353,7 +353,7 @@ void serial::autosendrestart()
 }
 
 
-void serial::append(quint8 type, QString msg)
+void SerialWidget::append(quint8 type, QString msg)
 {
     QString str;
 
@@ -375,20 +375,20 @@ void serial::append(quint8 type, QString msg)
     ui->display->append(QString("时间[%1] %2 %3").arg(DATETIME).arg(str).arg(msg));
 }
 
-void serial::on_sendcountbtn_clicked()
+void SerialWidget::on_sendcountbtn_clicked()
 {
     sendcount = 0;
     ui->sendcountbtn->setText("发送 : 0 字节");
 }
 
-void serial::on_recvcountbtn_clicked()
+void SerialWidget::on_recvcountbtn_clicked()
 {
     recvcount = 0;
     ui->recvcountbtn->setText("接收 : 0 字节");
 }
 
 /*
-void serial::on_savedatabtn_clicked()
+void SerialWidget::on_savedatabtn_clicked()
 {
     QString tempData = ui->display->toPlainText();//以纯文本的形式返回文本编辑的文本。
 
@@ -423,7 +423,7 @@ void serial::on_savedatabtn_clicked()
 }
 */
 
-void serial::on_cleardatabtn_clicked()
+void SerialWidget::on_cleardatabtn_clicked()
 {
     ui->display->clear();
     sendcount = 0;
@@ -432,7 +432,7 @@ void serial::on_cleardatabtn_clicked()
     ui->recvcountbtn->setText("接收 : 0 字节");
 }
 
-void serial::on_checkport_clicked()
+void SerialWidget::on_checkport_clicked()
 {
     ui->openbtn->setEnabled(false);
     ui->portname->clear();
@@ -451,15 +451,15 @@ void serial::on_checkport_clicked()
     ui->openbtn->setEnabled(true);
 }
 
-void serial::saveconfig()
+void SerialWidget::saveconfig()
 {
-    appCfg::BaudRate = ui->baudrate->currentText().toInt();
-    appCfg::StopBit = ui->stopbit->currentText().toInt();
-    appCfg::DataBit = ui->databit->currentText().toInt();
-    appCfg::CheckData =ui->checkbit->currentText().toUtf8();
-    appCfg::HexSend = ui->hexsend->isChecked();
-    appCfg::HexRecv = ui->hexrecv->isChecked();
-    appCfg::AutoSendTime =ui->autosendtime->currentText().toInt();
-    appCfg::Data=ui->senddata->toPlainText();
-    appCfg::writeconfig();
+    AppCfg::BaudRate = ui->baudrate->currentText().toInt();
+    AppCfg::StopBit = ui->stopbit->currentText().toInt();
+    AppCfg::DataBit = ui->databit->currentText().toInt();
+    AppCfg::CheckData =ui->checkbit->currentText().toUtf8();
+    AppCfg::HexSend = ui->hexsend->isChecked();
+    AppCfg::HexRecv = ui->hexrecv->isChecked();
+    AppCfg::AutoSendTime =ui->autosendtime->currentText().toInt();
+    AppCfg::Data=ui->senddata->toPlainText();
+    AppCfg::writeconfig();
 }

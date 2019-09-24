@@ -1,9 +1,9 @@
-﻿#ifndef APP_H
-#define APP_H
+﻿#ifndef APPCFG_H
+#define APPCFG_H
 
 class QString;
 
-class appCfg
+class AppCfg
 {
 public:
     //TCP
@@ -35,4 +35,4 @@ public:
 
 };
 
-#endif // APP_H
+#endif // APPCFG_H

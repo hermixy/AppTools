@@ -1,5 +1,5 @@
-﻿#ifndef SERIAL_H
-#define SERIAL_H
+﻿#ifndef SERIALWIDGET_H
+#define SERIALWIDGET_H
 
 #include <QMainWindow>
 #include <QSerialPort>
@@ -10,13 +10,13 @@ namespace Ui {
 class SerialWidget;
 }
 
-class serial : public QWidget
+class SerialWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit serial(QWidget *parent = nullptr);
-    ~serial();
+    explicit SerialWidget(QWidget *parent = nullptr);
+    ~SerialWidget();
 
 private slots:
     void initdata();
@@ -51,4 +51,4 @@ private:
     int recvcount;          //接收数据计数
     int sendcount;          //发送计数
 };
-#endif // SERIAL_H
+#endif // SERIALWIDGET_H

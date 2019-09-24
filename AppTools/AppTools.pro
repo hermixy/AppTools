@@ -24,7 +24,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 # Output directory
 CONFIG(debug, debug|release) {
     output = debug
-    TARGET = appTools
+    TARGET = AppTools
 }
 CONFIG(release, debug|release) {
     output = release

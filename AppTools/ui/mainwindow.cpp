@@ -4,7 +4,7 @@
 #include "SerialWidget.h"
 #include "TcpWidget.h"
 #include "CustomWidget.h"
-#include "floatcvn.h"
+#include "FloatWidget.h"
 #include "CrcWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -148,11 +148,11 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
         Frm=nullptr;
     }
     if(className=="串口助手")
-        Frm = new serial(this);
+        Frm = new SerialWidget(this);
     else if(className=="TCP助手")
-        Frm=new tcp(this);
+        Frm=new TcpWidget(this);
     else if(className=="浮点数转换助手")
-        Frm=new FloatCvn(this);
+        Frm=new FloatWidget(this);
     else if(className=="CRC助手")
         Frm=new CrcWidget(this);
     if(Frm!=nullptr)

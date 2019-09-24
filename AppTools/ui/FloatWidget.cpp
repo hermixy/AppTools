@@ -1,35 +1,35 @@
-#include "floatcvn.h"
-#include "ui_floatcvn.h"
-#include "helper/binaryCvn.h"
+#include "FloatWidget.h"
+#include "ui_FloatWidget.h"
+#include "helper/BinaryCvn.h"
 
-FloatCvn::FloatCvn(QWidget *parent) :
+FloatWidget::FloatWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::FloatCvn)
+    ui(new Ui::FloatWidget)
 {
     ui->setupUi(this);
 
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 }
 
-FloatCvn::~FloatCvn()
+FloatWidget::~FloatWidget()
 {
     delete ui;
 }
 
-void FloatCvn::on_convHex_clicked()
+void FloatWidget::on_convHex_clicked()
 {
     if(ui->FloatLine->text().isEmpty())
     {
         return;
     }
     float f=ui->FloatLine->text().toFloat();
-    unsigned int Hex=binaryCvn::fl(f);
+    unsigned int Hex=BinaryCvn::fl(f);
 
     //qDebug()<<Hex;
     ui->HexLine->setText(QString("%1").arg(Hex,8,16,QChar('0')));
 }
 
-void FloatCvn::on_convFlaot_clicked()
+void FloatWidget::on_convFlaot_clicked()
 {
     if(ui->HexLine->text().isEmpty())
     {
@@ -37,7 +37,7 @@ void FloatCvn::on_convFlaot_clicked()
     }
     QString h=ui->HexLine->text();
     QByteArray buffer;
-    buffer=binaryCvn::hexStrToByteArray(h);
+    buffer=BinaryCvn::hexStrToByteArray(h);
     unsigned char buf[4];
     for(int i=0;i<4;i++)
     {
@@ -45,7 +45,7 @@ void FloatCvn::on_convFlaot_clicked()
         buf[3-i]&=0xff;
         //qDebug()<<hex<<buf[3-i];
     }
-    float f=binaryCvn::ByteToFloat(buf);
+    float f=BinaryCvn::ByteToFloat(buf);
     ui->FloatLine->setText(QString("%1").arg(static_cast<double>(f)));
 }
 

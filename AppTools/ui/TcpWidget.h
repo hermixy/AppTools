@@ -1,5 +1,5 @@
-﻿#ifndef TCP_H
-#define TCP_H
+﻿#ifndef TCPWIDGET_H
+#define TCPWIDGET_H
 
 #include <QMainWindow>
 #include <QtNetwork/QTcpServer>
@@ -8,13 +8,13 @@ namespace Ui {
 class TcpWidget;
 }
 
-class tcp : public QWidget
+class TcpWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit tcp(QWidget *parent = nullptr);
-    ~tcp();
+    explicit TcpWidget(QWidget *parent = nullptr);
+    ~TcpWidget();
 
 private slots:
     void initform();
@@ -60,4 +60,4 @@ private:
     QTimer *timesend;               //定时发送串口数据
 };
 
-#endif // TCP_H
+#endif // TCPWIDGET_H

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>FloatCvn</class>
- <widget class="QWidget" name="FloatCvn">
+ <class>FloatWidget</class>
+ <widget class="QWidget" name="FloatWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

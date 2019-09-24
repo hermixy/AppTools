@@ -1,8 +1,8 @@
 ﻿#include "helper/myHelper.h"
-#include "helper/appCfg.h"
+#include "helper/AppCfg.h"
 #include "TcpWidget.h"
 #include "ui_TcpWidget.h"
-#include "helper/binaryCvn.h"
+#include "helper/BinaryCvn.h"
 
 #include <QNetworkInterface>
 #include <QTcpSocket>
@@ -11,7 +11,7 @@
 #pragma execution_character_set("utf-8")
 #endif
 
-tcp::tcp(QWidget *parent) :
+TcpWidget::TcpWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TcpWidget)
 {
@@ -23,13 +23,13 @@ tcp::tcp(QWidget *parent) :
     builtconnect();
 }
 
-tcp::~tcp()
+TcpWidget::~TcpWidget()
 {
     saveconfig();
     delete ui;
 }
 
-void tcp::initform()
+void TcpWidget::initform()
 {
     QStringList modellist;
     modellist<<"TCPServer"<<"TCPClient";
@@ -67,19 +67,19 @@ void tcp::initform()
     //ui->display->setFontPointSize(10);//设置字体大小
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    appCfg::readconfig();                          //读取配置
-    ui->model->findText(appCfg::model);
-    ui->ip->setText(appCfg::ip);
-    ui->port->setText(QString::number(appCfg::port));
-    ui->hexrecv->setChecked(appCfg::hexrecv);
-    ui->hexsend->setChecked(appCfg::hexsend);
-    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(appCfg::autosendtime)));
-    ui->autoconnecttime->setCurrentIndex(ui->autoconnecttime->findText(QString::number(appCfg::autosendtime)));
-    ui->senddata->setText(appCfg::data);
-    //qDebug()<<appCfg::port;
+    AppCfg::readconfig();                          //读取配置
+    ui->model->findText(AppCfg::model);
+    ui->ip->setText(AppCfg::ip);
+    ui->port->setText(QString::number(AppCfg::port));
+    ui->hexrecv->setChecked(AppCfg::hexrecv);
+    ui->hexsend->setChecked(AppCfg::hexsend);
+    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(AppCfg::autosendtime)));
+    ui->autoconnecttime->setCurrentIndex(ui->autoconnecttime->findText(QString::number(AppCfg::autosendtime)));
+    ui->senddata->setText(AppCfg::data);
+    //qDebug()<<AppCfg::port;
 }
 
-void tcp::initdata()
+void TcpWidget::initdata()
 {
     ok=false;
     recvcount = 0;
@@ -101,7 +101,7 @@ void tcp::initdata()
     //ui->ip->setText(iplistbox[0]);
 }
 
-void tcp::choose()
+void TcpWidget::choose()
 {
     initdata();
     if(ui->model->currentIndex()==0)
@@ -131,7 +131,7 @@ void tcp::choose()
     }
 }
 
-void tcp::builtconnect()
+void TcpWidget::builtconnect()
 {    //
     connect(ui->model, SIGNAL(currentIndexChanged(int)), this, SLOT(choose()));
     connect(ui->listen,SIGNAL(clicked()),this,SLOT(tcpopen()));
@@ -158,7 +158,7 @@ void tcp::builtconnect()
     });
 }
 
-void tcp::change(bool b)
+void TcpWidget::change(bool b)
 {
     ui->model->setEnabled(b);
     ui->ip->setEnabled(b);
@@ -167,7 +167,7 @@ void tcp::change(bool b)
     ui->autosend->setEnabled(!b);
 }
 
-void tcp::tcpopen()
+void TcpWidget::tcpopen()
 {
     if(ui->listen->text()=="监听")
     {
@@ -243,7 +243,7 @@ void tcp::tcpopen()
 }
 
 // newConnection -> newConnectionSlot 新连接建立的槽函数
-void tcp::NewConnectionSlot()
+void TcpWidget::NewConnectionSlot()
 {
     currentclient = tcpserver->nextPendingConnection();
     client.append(currentclient);
@@ -258,7 +258,7 @@ void tcp::NewConnectionSlot()
 }
 
 // disconnected -> disconnectedSlot 客户端断开连接的槽函数
-void tcp::disconnectedSlot()
+void TcpWidget::disconnectedSlot()
 {
     //由于disconnected信号并未提供SocketDescriptor，所以需要遍历寻找
     for(int i=0; i<client.length(); i++)
@@ -280,7 +280,7 @@ void tcp::disconnectedSlot()
     }
 }
 
-void tcp::ReadError(QAbstractSocket::SocketError)
+void TcpWidget::ReadError(QAbstractSocket::SocketError)
 {
     tcpclient->disconnectFromHost();
     ui->listen->setText(tr("连接"));
@@ -292,7 +292,7 @@ void tcp::ReadError(QAbstractSocket::SocketError)
 }
 
 // 客户端数据可读信号，对应的读数据槽函数
-void tcp::server_read()
+void TcpWidget::server_read()
 {
     // 由于readyRead信号并未提供SocketDecriptor，所以需要遍历所有客户端
     for(int i=0; i<client.length(); i++)
@@ -302,7 +302,7 @@ void tcp::server_read()
 
         QString buffer;//储存数据
         if (ui->hexrecv->isChecked()) {
-            buffer = binaryCvn::byteArrayToHexStr(data);//16进制接受
+            buffer = BinaryCvn::byteArrayToHexStr(data);//16进制接受
         }
         else {
             //buffer = myHelper::byteArrayToAsciiStr(data);//ascii码接受
@@ -322,7 +322,7 @@ void tcp::server_read()
     }
 }
 
-void tcp::senddata()
+void TcpWidget::senddata()
 {
     QString data = ui->senddata->toPlainText();
     if (data.isEmpty()) {
@@ -333,7 +333,7 @@ void tcp::senddata()
 
     QByteArray buffer;
     if (ui->hexsend->isChecked()) {
-        buffer = binaryCvn::hexStrToByteArray(data);
+        buffer = BinaryCvn::hexStrToByteArray(data);
     } else {
         //buffer = myHelper::asciiStrToByteArray(data);
         buffer=data.toUtf8();
@@ -379,14 +379,14 @@ void tcp::senddata()
     }
 }
 
-void tcp::client_read()
+void TcpWidget::client_read()
 {
     QByteArray data = tcpclient->readAll();
     if(data.isEmpty())    return;
 
     QString buffer;//储存数据
     if (ui->hexrecv->isChecked()) {
-        buffer = binaryCvn::byteArrayToHexStr(data);//16进制接受
+        buffer = BinaryCvn::byteArrayToHexStr(data);//16进制接受
     } else {
         //buffer = myHelper::byteArrayToAsciiStr(data);//ascii码接受
         buffer=data;
@@ -397,7 +397,7 @@ void tcp::client_read()
     ui->recvcount->setText(QString("接收 : %1 字节").arg(recvcount));
 }
 
-void tcp::on_autosend_stateChanged(int arg1)
+void TcpWidget::on_autosend_stateChanged(int arg1)
 {
     if (arg1 == 0)
         timesend->stop();
@@ -405,7 +405,7 @@ void tcp::on_autosend_stateChanged(int arg1)
         timesend->start();
 }
 
-void tcp::autosendrestart()
+void TcpWidget::autosendrestart()
 {
     if (ui->autosend->isChecked()){
         timesend->stop();
@@ -414,7 +414,7 @@ void tcp::autosendrestart()
     }
 }
 
-void tcp::append(quint8 type, QString msg)
+void TcpWidget::append(quint8 type, QString msg)
 {   
     QString str;
 
@@ -437,7 +437,7 @@ void tcp::append(quint8 type, QString msg)
     ui->display->append(QString("时间[%1] %2 %3").arg(DATETIME).arg(str).arg(msg));
 }
 
-void tcp::autoconnectrestart()
+void TcpWidget::autoconnectrestart()
 {
     if (ui->autoconnect->isChecked()){
         timeconnect->stop();
@@ -446,7 +446,7 @@ void tcp::autoconnectrestart()
     }
 }
 
-void tcp::on_autoconnect_stateChanged(int arg1)
+void TcpWidget::on_autoconnect_stateChanged(int arg1)
 {
     if (arg1 == 0)
     {
@@ -479,7 +479,7 @@ void tcp::on_autoconnect_stateChanged(int arg1)
     }
 }
 
-void tcp::connectrestart()
+void TcpWidget::connectrestart()
 {
     if(ui->listen->text()=="连接")
     {
@@ -496,20 +496,20 @@ void tcp::connectrestart()
     }
 }
 
-void tcp::on_sendcount_clicked()
+void TcpWidget::on_sendcount_clicked()
 {
     sendcount = 0;
     ui->sendcount->setText("发送 : 0 字节");
 }
 
-void tcp::on_recvcount_clicked()
+void TcpWidget::on_recvcount_clicked()
 {
     recvcount = 0;
     ui->recvcount->setText("接收 : 0 字节");
 }
 
 /*
-void tcp::on_savedata_clicked()
+void TcpWidget::on_savedata_clicked()
 {
     QString tempData = ui->display->toPlainText();//以纯文本的形式返回文本编辑的文本。
 
@@ -543,7 +543,7 @@ void tcp::on_savedata_clicked()
     }
 }
 */
-void tcp::on_cleardata_clicked()
+void TcpWidget::on_cleardata_clicked()
 {
     ui->display->clear();
     sendcount = 0;
@@ -552,15 +552,15 @@ void tcp::on_cleardata_clicked()
     ui->recvcount->setText("接收 : 0 字节");
 }
 
-void tcp::saveconfig()
+void TcpWidget::saveconfig()
 {
-    appCfg::model=ui->model->currentText();
-    appCfg::ip=ui->ip->text().toUtf8();
-    appCfg::port=ui->port->text().toInt();
-    appCfg::hexrecv=ui->hexrecv->isChecked();
-    appCfg::hexsend=ui->hexsend->isChecked();
-    appCfg::autosendtime=ui->autosendtime->currentText().toInt();
-    appCfg::autoconnecttime=ui->autoconnecttime->currentText().toInt();
-    appCfg::data=ui->senddata->toPlainText();
-    appCfg::writeconfig();
+    AppCfg::model=ui->model->currentText();
+    AppCfg::ip=ui->ip->text().toUtf8();
+    AppCfg::port=ui->port->text().toInt();
+    AppCfg::hexrecv=ui->hexrecv->isChecked();
+    AppCfg::hexsend=ui->hexsend->isChecked();
+    AppCfg::autosendtime=ui->autosendtime->currentText().toInt();
+    AppCfg::autoconnecttime=ui->autoconnecttime->currentText().toInt();
+    AppCfg::data=ui->senddata->toPlainText();
+    AppCfg::writeconfig();
 }

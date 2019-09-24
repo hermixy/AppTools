@@ -5,7 +5,7 @@
 #include <QtGui>
 #include <QtWidgets>
 
-class binaryCvn: public QObject
+class BinaryCvn: public QObject
 {
 public:
     static unsigned int fl(float a)
