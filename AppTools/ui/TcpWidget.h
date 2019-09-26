@@ -17,47 +17,47 @@ public:
     ~TcpWidget();
 
 private slots:
-    void initform();
+    void initWindow();
     void choose();
-    void initdata();
-    void builtconnect();
+    void initData();
+    void builtConnect();
     void change(bool b);
-    void tcpopen();
+    void openTcp();
     void append(quint8 type, QString msg);
-    void senddata();
+    void sendData();
     void on_autosend_stateChanged(int arg1);
-    void autosendrestart();
+    void autoSendRestart();
 
-    void NewConnectionSlot();       //sever
-    void disconnectedSlot();
-    void server_read();
+    void newConnection();       //sever
+    void disconnected();
+    void serverRead();
 
-    void ReadError(QAbstractSocket::SocketError);//client
-    void client_read();
-    void autoconnectrestart();
-    void connectrestart();
+    void readError(QAbstractSocket::SocketError);//client
+    void clientRead();
+    void autCconnectRestart();
+    void connectRestart();
     void on_autoconnect_stateChanged(int arg1);
     void on_sendcount_clicked();
     void on_recvcount_clicked();
     //void on_savedata_clicked();
     void on_cleardata_clicked();
 
-    void saveconfig();
+    void saveConfig();
 
 private:
     Ui::TcpWidget *ui;
 
-    QTcpServer *tcpserver;          //server
-    QList<QTcpSocket*> client;
-    QTcpSocket *currentclient;
+    QTcpServer *server;          //server
+    QList<QTcpSocket*> serverClient;
+    QTcpSocket *serverCurrentClient;
 
-    QTcpSocket *tcpclient;          //client
-    QTimer *timeconnect;
+    QTcpSocket *client;          //client
+    QTimer *timeConnect;
 
     bool ok;
-    int recvcount;                  //接收数据计数
-    int sendcount;                  //发送计数
-    QTimer *timesend;               //定时发送串口数据
+    int recvCount;                  //接收数据计数
+    int sendCount;                  //发送计数
+    QTimer *sendTime;               //定时发送串口数据
 };
 
 #endif // TCPWIDGET_H

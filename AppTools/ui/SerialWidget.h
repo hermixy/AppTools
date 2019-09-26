@@ -19,17 +19,17 @@ public:
     ~SerialWidget();
 
 private slots:
-    void initdata();
-    void initform();
-    void builtconnect();
-    void openserial();
+    void initData();
+    void initWindow();
+    void builtConnect();
+    void openSerial();
     void readData();                //读取串口数据
     void sendData();                //发送串口数据
     void sendData(QString data);    //发送串口数据带参数
     void changeEnable(bool b);      //改变状态
 
     void restart();
-    void autosendrestart();
+    void autoSendRestart();
     void append(quint8 type, QString msg);//显示
     void on_autosend_stateChanged(int arg1);
     void on_sendcountbtn_clicked();
@@ -38,17 +38,17 @@ private slots:
     void on_cleardatabtn_clicked();
     void on_checkport_clicked();
 
-    void saveconfig();
+    void saveConfig();
 
 private:
     Ui::SerialWidget *ui;
 
-    QSerialPort *myserial;   //串口通信对象
-    QTimer *timesend;        //定时发送串口数据
+    QSerialPort *mySerial;   //串口通信对象
+    QTimer *sendTime;        //定时发送串口数据
     bool ok;
 
-    int waittime;           //接收延时时间
-    int recvcount;          //接收数据计数
-    int sendcount;          //发送计数
+    int waitTime;           //接收延时时间
+    int recvCount;          //接收数据计数
+    int sendCount;          //发送计数
 };
 #endif // SERIALWIDGET_H

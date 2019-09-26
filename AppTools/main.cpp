@@ -1,5 +1,5 @@
 #include "ui/mainwindow.h"
-#include "helper/myHelper.h"
+#include "helper/MyHelper.h"
 
 #include <QApplication>
 
@@ -10,7 +10,7 @@ void set()
 
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    myHelper::qssopen(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+    MyHelper::setQss(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
 }
 
 int main(int argc, char *argv[])

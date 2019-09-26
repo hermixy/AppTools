@@ -1,6 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "helper/myHelper.h"
+#include "helper/MyHelper.h"
 #include "SerialWidget.h"
 #include "TcpWidget.h"
 #include "CustomWidget.h"
@@ -10,7 +10,7 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,Frm(nullptr)
+    ,myWidget(nullptr)
     ,sizeGrip(nullptr)
 {
     ui->setupUi(this);
@@ -19,9 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     initWindow();
     setPaddingAndSpacing();
-    titlebtn();
+    titleBtn();
 
-    createbtnmenu();
+    createListWidgetBtnMenu();
     registerClass();
 }
 
@@ -32,17 +32,17 @@ MainWindow::~MainWindow()
         delete sizeGrip;
         sizeGrip=nullptr;
     }
-    if(Frm!=nullptr)
+    if(myWidget!=nullptr)
     {
-        delete Frm;
-        Frm=nullptr;
+        delete myWidget;
+        myWidget=nullptr;
     }
     delete ui;
 }
 
 void MainWindow::initWindow()
 {
-    myHelper::InCenter(this);
+    MyHelper::windowCenter(this);
     setWindowTitle("AppTools");
 
     sizeGrip=new QSizeGrip(nullptr);
@@ -56,11 +56,11 @@ void MainWindow::initWindow()
     ui->labelicon->setPixmap(QPixmap((QString("%1/image/setting-icon-dark.png")\
                                       .arg(qApp->applicationDirPath()))));
 
-    Frm=new CustomWidget(QString("你好呀!"),this);
-    if(Frm!=nullptr)
+    myWidget=new CustomWidget(QString("你好呀!"),this);
+    if(myWidget!=nullptr)
     {
-        ui->stackedWidget->addWidget(Frm);
-        ui->stackedWidget->setCurrentWidget(Frm);
+        ui->stackedWidget->addWidget(myWidget);
+        ui->stackedWidget->setCurrentWidget(myWidget);
         //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
@@ -85,9 +85,18 @@ void MainWindow::setWidgetPaddingAndSpacing(QWidget *widget, int padding, int sp
     }
 }
 
-void MainWindow::titlebtn()
+void MainWindow::titleBtn()
 {
-    ui->minbtn->hide();
+    if(!this->isMaximized())
+    {
+        ui->minbtn->hide();
+        ui->maxbtn->show();
+    }
+    else
+    {
+        ui->maxbtn->hide();
+        ui->minbtn->show();
+    }
     connect(ui->closebtn,&QPushButton::clicked,[]
     {
         QApplication::quit();
@@ -110,7 +119,7 @@ void MainWindow::titlebtn()
     });
 }
 
-void MainWindow::createbtnmenu()
+void MainWindow::createListWidgetBtnMenu()
 {
     ui->listWidget->setFont(QFont("微软雅黑", 12, QFont::Normal, false));
     ui->listWidget->setSpacing(5);
@@ -138,27 +147,27 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
     //qDebug()<<className;
     if(className=="重新加载QSS")
     {
-        myHelper::qssopen(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+        MyHelper::setQss(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
         qDebug()<<"重新加载QSS";
         return;
     }
-    if(Frm!=nullptr)
+    if(myWidget!=nullptr)
     {
-        delete Frm;
-        Frm=nullptr;
+        delete myWidget;
+        myWidget=nullptr;
     }
     if(className=="串口助手")
-        Frm = new SerialWidget(this);
+        myWidget = new SerialWidget(this);
     else if(className=="TCP助手")
-        Frm=new TcpWidget(this);
+        myWidget=new TcpWidget(this);
     else if(className=="浮点数转换助手")
-        Frm=new FloatWidget(this);
+        myWidget=new FloatWidget(this);
     else if(className=="CRC助手")
-        Frm=new CrcWidget(this);
-    if(Frm!=nullptr)
+        myWidget=new CrcWidget(this);
+    if(myWidget!=nullptr)
     {
-        ui->stackedWidget->addWidget(Frm);
-        ui->stackedWidget->setCurrentWidget(Frm);
+        ui->stackedWidget->addWidget(myWidget);
+        ui->stackedWidget->setCurrentWidget(myWidget);
         //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
@@ -167,26 +176,26 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
 void MainWindow::mousePressEvent(QMouseEvent *event)
 {
     //读取坐鼠标点击坐标点
-    lastpoint = event->globalPos();
+    lastPoint = event->globalPos();
 }
 
 //鼠标移动事件
 void MainWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if (this->isMaximized()) { return; }
-    if(!lastpoint.isNull())
+    if(!lastPoint.isNull())
     {
         //把移动的点记录下来
         //int dx = event->globalX() - lastpoint.x();//这种也可以
         //int dy = event->globalY() - lastpoint.y();
         //move(x() + dx, y() + dy); //窗口移动到此处
-        movepoint=event->globalPos()-lastpoint;
-        lastpoint = event->globalPos(); //更新记录点
-        move(pos()+movepoint);
+        movePoint=event->globalPos()-lastPoint;
+        lastPoint = event->globalPos(); //更新记录点
+        move(pos()+movePoint);
     }
 }
 //鼠标释放事件
 void MainWindow::mouseReleaseEvent(QMouseEvent *)
 {
-    lastpoint=QPoint();
+    lastPoint=QPoint();
 }

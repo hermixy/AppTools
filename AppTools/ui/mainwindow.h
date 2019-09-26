@@ -21,8 +21,8 @@ private slots:
     void setPaddingAndSpacing();
     void initWindow();
     void setWidgetPaddingAndSpacing(QWidget *widget, int padding, int spacing);
-    void titlebtn();
-    void createbtnmenu();
+    void titleBtn();
+    void createListWidgetBtnMenu();
     void registerClass();
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
@@ -39,11 +39,11 @@ private:
     QListWidgetItem *floatTool;
     QListWidgetItem *qssTool;
 
-    QWidget *Frm;
+    QWidget *myWidget;
     QSizeGrip *sizeGrip;
 
     //记录鼠标位置
-    QPoint lastpoint;
-    QPoint movepoint;
+    QPoint lastPoint;
+    QPoint movePoint;
 };
 #endif // MAINWINDOW_H

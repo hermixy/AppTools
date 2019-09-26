@@ -2,6 +2,17 @@
 	background:#F8F8F8;
 }
 
+QPushButton{
+    font-size: 12px;
+    border: 1px solid #dddee1;
+    border-radius: 4px;
+	min-height: 25px;
+}
+
+QPushButton:hover{
+	background-color: #0066ff;
+}
+
 #titlewidget{
 	border-color:black;
 	background: white;
@@ -15,6 +26,10 @@
     min-height: 16px;
     max-height: 16px;
     border-width: 0;
+}
+
+#titlewidget QPushButton:hover{
+	background-color: #ffffff;
 }
 
 #titlewidget #closebtn {
@@ -68,39 +83,6 @@ QListWidget#listWidget{
         background-color:#818181;
 }
 
-#TcpWidget QPushButton{
-    font-size: 12px;
-    border: 1px solid #dddee1;
-    border-radius: 4px;
-	min-height: 25px;
-}
-
-#TcpWidget QPushButton:hover{
-	background-color: #00aaff;
-}
-
-#SerialWidget QPushButton{
-    font-size: 12px;
-    border: 1px solid #dddee1;
-    border-radius: 4px;
-	min-height: 25px;
-}
-
-#SerialWidget QPushButton:hover{
-	background-color: #00aaff;
-}
-
-#FloatCvn QPushButton{
-    font-size: 12px;
-    border: 1px solid #dddee1;
-    border-radius: 4px;
-	min-height: 25px;
-}
-
-#FloatCvn QPushButton:hover{
-	background-color: #00aaff;
-}
-
 /******************************************************************************
  *                                   QLineEdit
  *****************************************************************************/
@@ -121,9 +103,38 @@ QLineEdit:focus {
 }
 
 /******************************************************************************
+ *                                   QTextBrowser
+ *****************************************************************************/
+ QTextBrowser{
+	 font-size: 12px;
+    border: 1px solid #dddee1;
+    border-radius: 4px;
+    color: #495060;
+    background-color: #fff;
+    padding: 0 4px;
+ }
+QTextBrowser:focus {
+    border-color: #57a3f3;
+}
+
+/******************************************************************************
+ *                                   QTextEdit
+ *****************************************************************************/
+ QTextEdit{
+	 font-size: 12px;
+    border: 1px solid #dddee1;
+    border-radius: 4px;
+    color: #495060;
+    background-color: #fff;
+    padding: 0 4px;
+ }
+QTextEdit:focus {
+    border-color: #57a3f3;
+} 
+
+/******************************************************************************
  *                                   QCheckBox&QRadioButton
  *****************************************************************************/
- 
 QCheckBox::indicator, QRadioButton::indicator {
     subcontrol-origin: border;
     subcontrol-position: left center;
@@ -138,7 +149,7 @@ QCheckBox::indicator {
 }
 
 QCheckBox::indicator:checked {
-    border-image: url(image/checkbox-checked-insensitive.png);
+    border-image: url(image/checkbox-checked-selectionmode.png);
 }
 
 QRadioButton::indicator {
@@ -175,11 +186,11 @@ QComboBox::drop-down {
     subcontrol-origin: border;
     subcontrol-position: right center;
     border-width: 0 0 0 0;
-    border-image: url(image/combobox-arrow.png);
+    border-image: url(image/arrow-down.png);
 }
 
 QComboBox::drop-down:hover {
-    border-image: url(image/combobox-arrow@2.png);
+    border-image: url(image/arrow-down-hover.png);
 }
 
 QComboBox QAbstractItemView {
@@ -263,4 +274,3 @@ QScrollBar::sub-line:horizontal, QScrollBar::add-line:horizontal {
     width: 0;
     height: 0;
 }
-

@@ -23,7 +23,7 @@ void FloatWidget::on_convHex_clicked()
         return;
     }
     float f=ui->FloatLine->text().toFloat();
-    unsigned int Hex=BinaryCvn::fl(f);
+    unsigned int Hex=BinaryCvn::floatToHex(f);
 
     //qDebug()<<Hex;
     ui->HexLine->setText(QString("%1").arg(Hex,8,16,QChar('0')));
@@ -45,7 +45,7 @@ void FloatWidget::on_convFlaot_clicked()
         buf[3-i]&=0xff;
         //qDebug()<<hex<<buf[3-i];
     }
-    float f=BinaryCvn::ByteToFloat(buf);
+    float f=BinaryCvn::hexToFloat(buf);
     ui->FloatLine->setText(QString("%1").arg(static_cast<double>(f)));
 }
 

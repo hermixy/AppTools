@@ -20,7 +20,7 @@
 #ifndef MYHELPER_H
 #define MYHELPER_H
 
-class myHelper: public QObject
+class MyHelper: public QObject
 {
 public:
     static void setUTF8Code()
@@ -29,7 +29,7 @@ public:
     }
 
     //设置指定样式
-    static void qssopen(QString qssfile)
+    static void setQss(QString qssfile)
     {
         QFile file(qssfile);
         if (file.open(QFile::ReadOnly))
@@ -55,7 +55,7 @@ public:
     }
 
     //窗体居中显示
-    static void InCenter(QWidget *frm)
+    static void windowCenter(QWidget *frm)
     {
         int frmX = frm->width();
         int frmY = frm->height();
@@ -66,7 +66,7 @@ public:
         frm->move(movePoint);
     }
 
-    static void savedata(QTextBrowser *txt,QWidget *t)
+    static void saveToFile(QTextBrowser *txt,QWidget *t)
     {
         QString tempData = txt->toPlainText();//以纯文本的形式返回文本编辑的文本。
         if (tempData == "")

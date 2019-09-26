@@ -1,31 +1,31 @@
 ﻿#include "AppCfg.h"
-#include "myHelper.h"
+#include "MyHelper.h"
 
 #pragma execution_character_set("utf-8")
 
 //TCP
-QString AppCfg::model = "TCPServer";
-QString AppCfg::ip = "127.0.0.1";
-int AppCfg::port = 8000;
-bool AppCfg::hexsend = true;
-bool AppCfg::hexrecv = true;
-int AppCfg::autosendtime = 1000;
-int AppCfg::autoconnecttime = 1000;
-QString AppCfg::data="";
+QString AppCfg::tcpModel = "TCPServer";
+QString AppCfg::tcpIp = "127.0.0.1";
+int AppCfg::tcpPort = 8000;
+bool AppCfg::tcpHexSend = true;
+bool AppCfg::tcpHexRecv = true;
+int AppCfg::tcpAutoSendTime = 1000;
+int AppCfg::tcpAutoConnectTime = 1000;
+QString AppCfg::tcpData="";
 
 //Serial
-int AppCfg::BaudRate=9600;
-int AppCfg::StopBit=1;
-int AppCfg::DataBit=8;
-QString AppCfg::CheckData="无";
-bool AppCfg::HexSend=true;                //16进制发送
-bool AppCfg::HexRecv=true;                //16进制接收
-int AppCfg::AutoSendTime=1000;            //自动发送间隔
-QString AppCfg::Data="";
+int AppCfg::serialBaudRate=9600;
+int AppCfg::serialStopBit=1;
+int AppCfg::serialDataBit=8;
+QString AppCfg::serialCheckData="无";
+bool AppCfg::serialHexSend=true;                //16进制发送
+bool AppCfg::serialHexRecv=true;                //16进制接收
+int AppCfg::serialAutoSendTime=1000;            //自动发送间隔
+QString AppCfg::serialData="";
 
-void AppCfg::readconfig()
+void AppCfg::readConfig()
 {
-    if (!checkconfig()) {
+    if (!checkConfig()) {
         qDebug()<<"check error";
         return;
     }
@@ -34,63 +34,63 @@ void AppCfg::readconfig()
     QSettings set(fileName, QSettings::IniFormat);
 
     set.beginGroup("tcpconfig");//向当前组追加前缀
-    AppCfg::model = set.value("model").toString();
-    AppCfg::ip = set.value("ip").toString();
-    AppCfg::port = set.value("port").toInt();
-    AppCfg::hexsend = set.value("hexsend").toBool();
-    AppCfg::hexrecv = set.value("hexrecv").toBool();
-    AppCfg::autosendtime = set.value("autosendtime").toInt();
-    AppCfg::autoconnecttime = set.value("autoconnecttime").toInt();
-    AppCfg::data=set.value("senddata").toString();
+    AppCfg::tcpModel = set.value("model").toString();
+    AppCfg::tcpIp = set.value("ip").toString();
+    AppCfg::tcpPort = set.value("port").toInt();
+    AppCfg::tcpHexSend = set.value("hexsend").toBool();
+    AppCfg::tcpHexRecv = set.value("hexrecv").toBool();
+    AppCfg::tcpAutoSendTime = set.value("autosendtime").toInt();
+    AppCfg::tcpAutoConnectTime = set.value("autoconnecttime").toInt();
+    AppCfg::tcpData=set.value("senddata").toString();
     set.endGroup();
 
     set.beginGroup("serialconfig");//向当前组追加前缀
-    AppCfg::BaudRate = set.value("BaudRate").toInt();
-    AppCfg::StopBit = set.value("StopBit").toInt();
-    AppCfg::DataBit = set.value("DataBit").toInt();
-    AppCfg::CheckData = set.value("CheckData").toString();
-    AppCfg::HexSend = set.value("HexSend").toBool();
-    AppCfg::HexRecv = set.value("HexRecv").toBool();
-    AppCfg::AutoSendTime = set.value("AutoSendTime").toInt();
-    AppCfg::Data=set.value("SendData").toString();
+    AppCfg::serialBaudRate = set.value("BaudRate").toInt();
+    AppCfg::serialStopBit = set.value("StopBit").toInt();
+    AppCfg::serialDataBit = set.value("DataBit").toInt();
+    AppCfg::serialCheckData = set.value("CheckData").toString();
+    AppCfg::serialHexSend = set.value("HexSend").toBool();
+    AppCfg::serialHexRecv = set.value("HexRecv").toBool();
+    AppCfg::serialAutoSendTime = set.value("AutoSendTime").toInt();
+    AppCfg::serialData=set.value("SendData").toString();
     set.endGroup();
 }
 
-void AppCfg::writeconfig()
+void AppCfg::writeConfig()
 {
     QString fileName = QString("%1/cfg/config.ini").arg(AppPath);
     QSettings set(fileName, QSettings::IniFormat);
 
     set.beginGroup("tcpconfig");
-    set.setValue("model", AppCfg::model);
-    set.setValue("ip", AppCfg::ip);
-    set.setValue("port", AppCfg::port);
-    set.setValue("hexsend", AppCfg::hexsend);
-    set.setValue("hexrecv", AppCfg::hexrecv);
-    set.setValue("autosendtime", AppCfg::autosendtime);
-    set.setValue("autoconnecttime", AppCfg::autoconnecttime);
-    set.setValue("senddata",AppCfg::data);
+    set.setValue("model", AppCfg::tcpModel);
+    set.setValue("ip", AppCfg::tcpIp);
+    set.setValue("port", AppCfg::tcpPort);
+    set.setValue("hexsend", AppCfg::tcpHexSend);
+    set.setValue("hexrecv", AppCfg::tcpHexRecv);
+    set.setValue("autosendtime", AppCfg::tcpAutoSendTime);
+    set.setValue("autoconnecttime", AppCfg::tcpAutoConnectTime);
+    set.setValue("senddata",AppCfg::tcpData);
     set.endGroup();
 
     set.beginGroup("serialconfig");
-    set.setValue("BaudRate", AppCfg::BaudRate);
-    set.setValue("StopBit", AppCfg::StopBit);
-    set.setValue("DataBit", AppCfg::DataBit);
-    set.setValue("CheckData", AppCfg::CheckData);
-    set.setValue("HexSend", AppCfg::HexSend);
-    set.setValue("HexRecv", AppCfg::HexRecv);
-    set.setValue("AutoSendTime", AppCfg::AutoSendTime);
-    set.setValue("SendData",AppCfg::Data);
+    set.setValue("BaudRate", AppCfg::serialBaudRate);
+    set.setValue("StopBit", AppCfg::serialStopBit);
+    set.setValue("DataBit", AppCfg::serialDataBit);
+    set.setValue("CheckData", AppCfg::serialCheckData);
+    set.setValue("HexSend", AppCfg::serialHexSend);
+    set.setValue("HexRecv", AppCfg::serialHexRecv);
+    set.setValue("AutoSendTime", AppCfg::serialAutoSendTime);
+    set.setValue("SendData",AppCfg::serialData);
     set.endGroup();
 }
 
-void AppCfg::newconfig()
+void AppCfg::newConfig()
 {
-    writeconfig();
+    writeConfig();
 }
 
 
-bool AppCfg::checkconfig()
+bool AppCfg::checkConfig()
 {
     QString fileName = QString("%1/cfg/config.ini").arg(AppPath);
 
@@ -99,13 +99,13 @@ bool AppCfg::checkconfig()
 
     if (file.size() == 0) {
         qDebug()<<"filesize=0";
-        newconfig();
+        newConfig();
         return false;
     }
     return true;
 }
 
-void AppCfg::writeerror(QString str)
+void AppCfg::writeError(QString str)
 {
     QString fileName = QString("%1/cfg/Error_%2.txt").arg(AppPath).arg(QDATE);
     QFile file(fileName);
@@ -114,7 +114,7 @@ void AppCfg::writeerror(QString str)
     stream << DATETIME << "  " << str << "\n";
 }
 
-void AppCfg::newdir(QString dirname)
+void AppCfg::newDir(QString dirname)
 {
     //如果路径中包含斜杠字符则说明是绝对路径
     //linux系统路径字符带有 /  windows系统 路径字符带有 :/

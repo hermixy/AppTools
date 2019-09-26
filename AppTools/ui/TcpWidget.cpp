@@ -1,4 +1,4 @@
-﻿#include "helper/myHelper.h"
+﻿#include "helper/MyHelper.h"
 #include "helper/AppCfg.h"
 #include "TcpWidget.h"
 #include "ui_TcpWidget.h"
@@ -16,20 +16,20 @@ TcpWidget::TcpWidget(QWidget *parent) :
     ui(new Ui::TcpWidget)
 {
     ui->setupUi(this);
-    tcpserver = new QTcpServer(this);
-    tcpclient = new QTcpSocket(this);   //实例化tcpClient
-    initform();
+    server = new QTcpServer(this);
+    client = new QTcpSocket(this);   //实例化tcpClient
+    initWindow();
     choose();
-    builtconnect();
+    builtConnect();
 }
 
 TcpWidget::~TcpWidget()
 {
-    saveconfig();
+    saveConfig();
     delete ui;
 }
 
-void TcpWidget::initform()
+void TcpWidget::initWindow()
 {
     QStringList modellist;
     modellist<<"TCPServer"<<"TCPClient";
@@ -67,23 +67,23 @@ void TcpWidget::initform()
     //ui->display->setFontPointSize(10);//设置字体大小
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    AppCfg::readconfig();                          //读取配置
-    ui->model->findText(AppCfg::model);
-    ui->ip->setText(AppCfg::ip);
-    ui->port->setText(QString::number(AppCfg::port));
-    ui->hexrecv->setChecked(AppCfg::hexrecv);
-    ui->hexsend->setChecked(AppCfg::hexsend);
-    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(AppCfg::autosendtime)));
-    ui->autoconnecttime->setCurrentIndex(ui->autoconnecttime->findText(QString::number(AppCfg::autosendtime)));
-    ui->senddata->setText(AppCfg::data);
+    AppCfg::readConfig();                          //读取配置
+    ui->model->findText(AppCfg::tcpModel);
+    ui->ip->setText(AppCfg::tcpIp);
+    ui->port->setText(QString::number(AppCfg::tcpPort));
+    ui->hexrecv->setChecked(AppCfg::tcpHexRecv);
+    ui->hexsend->setChecked(AppCfg::tcpHexSend);
+    ui->autosendtime->setCurrentIndex(ui->autosendtime->findText(QString::number(AppCfg::tcpAutoSendTime)));
+    ui->autoconnecttime->setCurrentIndex(ui->autoconnecttime->findText(QString::number(AppCfg::tcpAutoSendTime)));
+    ui->senddata->setText(AppCfg::tcpData);
     //qDebug()<<AppCfg::port;
 }
 
-void TcpWidget::initdata()
+void TcpWidget::initData()
 {
     ok=false;
-    recvcount = 0;
-    sendcount = 0;
+    recvCount = 0;
+    sendCount = 0;
     ui->sendcount->setText("发送 : 0 字节");
     ui->recvcount->setText("接收 : 0 字节");
 
@@ -103,7 +103,7 @@ void TcpWidget::initdata()
 
 void TcpWidget::choose()
 {
-    initdata();
+    initData();
     if(ui->model->currentIndex()==0)
     {
         ui->listen->setText("监听");
@@ -127,34 +127,34 @@ void TcpWidget::choose()
         ui->ip->setReadOnly(false);
         ui->iplabel->setText("服务器IP:");
         ui->portlabel->setText("服务器端口:");
-        tcpclient->abort();                 //取消原有连接
+        client->abort();                 //取消原有连接
     }
 }
 
-void TcpWidget::builtconnect()
+void TcpWidget::builtConnect()
 {    //
     connect(ui->model, SIGNAL(currentIndexChanged(int)), this, SLOT(choose()));
-    connect(ui->listen,SIGNAL(clicked()),this,SLOT(tcpopen()));
+    connect(ui->listen,SIGNAL(clicked()),this,SLOT(openTcp()));
 
-    connect(tcpserver, SIGNAL(newConnection()), this, SLOT(NewConnectionSlot()));
+    connect(server, SIGNAL(newConnection()), this, SLOT(newConnection()));
 
-    timesend = new QTimer(this);
-    timesend->setInterval(ui->autosendtime->currentText().toInt());
-    connect(ui->autosendtime, SIGNAL(currentIndexChanged(int)), this, SLOT(autosendrestart()));
+    sendTime = new QTimer(this);
+    sendTime->setInterval(ui->autosendtime->currentText().toInt());
+    connect(ui->autosendtime, SIGNAL(currentIndexChanged(int)), this, SLOT(autoSendRestart()));
     //发送数据
-    connect(timesend, SIGNAL(timeout()), this, SLOT(senddata()));
-    connect(ui->sendbtn, SIGNAL(clicked()), this, SLOT(senddata()));
+    connect(sendTime, SIGNAL(timeout()), this, SLOT(sendData()));
+    connect(ui->sendbtn, SIGNAL(clicked()), this, SLOT(sendData()));
 
-    timeconnect=new QTimer(this);
-    timeconnect->setInterval(ui->autoconnecttime->currentText().toInt());
-    connect(ui->autoconnecttime,SIGNAL(currentIndexChanged(int)), this, SLOT(autoconnectrestart()));
-    connect(timeconnect, SIGNAL(timeout()), this, SLOT(connectrestart()));
-    connect(tcpclient, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(ReadError(QAbstractSocket::SocketError)));
-    connect(tcpclient, SIGNAL(readyRead()), this, SLOT(client_read()));
+    timeConnect=new QTimer(this);
+    timeConnect->setInterval(ui->autoconnecttime->currentText().toInt());
+    connect(ui->autoconnecttime,SIGNAL(currentIndexChanged(int)), this, SLOT(autCconnectRestart()));
+    connect(timeConnect, SIGNAL(timeout()), this, SLOT(connectRestart()));
+    connect(client, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(readError(QAbstractSocket::SocketError)));
+    connect(client, SIGNAL(readyRead()), this, SLOT(clientRead()));
 
     connect(ui->savedata,&QPushButton::clicked,[this]
     {
-        myHelper::savedata(ui->display,this);
+        MyHelper::saveToFile(ui->display,this);
     });
 }
 
@@ -167,7 +167,7 @@ void TcpWidget::change(bool b)
     ui->autosend->setEnabled(!b);
 }
 
-void TcpWidget::tcpopen()
+void TcpWidget::openTcp()
 {
     if(ui->listen->text()=="监听")
     {
@@ -175,7 +175,7 @@ void TcpWidget::tcpopen()
             append(2,"端口号为空!");
             return;
         }
-        ok = tcpserver->listen(QHostAddress::Any, quint16(ui->port->text().toInt()));
+        ok = server->listen(QHostAddress::Any, quint16(ui->port->text().toInt()));
         if(ok)
         {
             ui->listen->setText("断开");
@@ -191,20 +191,20 @@ void TcpWidget::tcpopen()
     {
         change(true);
         ui->autoconnect->setChecked(false);
-        timesend->stop();
-        for(int i=0; i<client.length(); i++)//断开所有连接
+        sendTime->stop();
+        for(int i=0; i<serverClient.length(); i++)//断开所有连接
         {
             ui->allconnect->removeItem(ui->allconnect->findText(tr("%1:%2")\
-                                                                .arg(client[i]->peerAddress().toString().split("::ffff:")[1])\
-                                       .arg(client[i]->peerPort())));
-            QString msg1=QString("%1[%2:%3]").arg("IP").arg(client[i]->peerAddress().toString().split("::ffff:")[1])\
-                    .arg(client[i]->peerPort());
+                                                                .arg(serverClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                                       .arg(serverClient[i]->peerPort())));
+            QString msg1=QString("%1[%2:%3]").arg("IP").arg(serverClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                    .arg(serverClient[i]->peerPort());
             append(4,msg1);
             //tcpClient123.at(i)->close();
-            client[i]->deleteLater();
-            client.removeAt(i);  //从保存的客户端列表中取去除
+            serverClient[i]->deleteLater();
+            serverClient.removeAt(i);  //从保存的客户端列表中取去除
         }
-        tcpserver->close();     //不再监听端口
+        server->close();     //不再监听端口
         ui->listen->setText("监听");
         append(3,"监听关闭!");
         ok=false;
@@ -216,8 +216,8 @@ void TcpWidget::tcpopen()
             append(2,"服务器IP或者端口号为空!");
             return;
         }
-        tcpclient->connectToHost(ui->ip->text(), quint16(ui->port->text().toInt()));
-        if (tcpclient->waitForConnected(1000))  // 连接成功则进入if{}
+        client->connectToHost(ui->ip->text(), quint16(ui->port->text().toInt()));
+        if (client->waitForConnected(1000))  // 连接成功则进入if{}
         {
             ui->listen->setText("断开连接");
             change(false);
@@ -228,14 +228,14 @@ void TcpWidget::tcpopen()
     }
     else if(ui->listen->text()=="断开连接")
     {
-        tcpclient->disconnectFromHost();
-        if (tcpclient->state() == QAbstractSocket::UnconnectedState|| tcpclient->waitForDisconnected(1000))  //已断开连接则进入if{}
+        client->disconnectFromHost();
+        if (client->state() == QAbstractSocket::UnconnectedState|| client->waitForDisconnected(1000))  //已断开连接则进入if{}
         {
             ui->listen->setText("连接");
             ui->autoconnect->setChecked(false);
             change(true);
-            timeconnect->stop();
-            timesend->stop();
+            timeConnect->stop();
+            sendTime->stop();
             ui->autosend->setChecked(false);
             append(3,"断开连接成功!");
         }
@@ -243,61 +243,61 @@ void TcpWidget::tcpopen()
 }
 
 // newConnection -> newConnectionSlot 新连接建立的槽函数
-void TcpWidget::NewConnectionSlot()
+void TcpWidget::newConnection()
 {
-    currentclient = tcpserver->nextPendingConnection();
-    client.append(currentclient);
-    ui->allconnect->addItem(tr("%1:%2").arg(currentclient->peerAddress().toString().split("::ffff:")[1])\
-            .arg(currentclient->peerPort()));
-    QString msg2=QString("%1[%2:%3]").arg("IP").arg(currentclient->peerAddress().toString().split("::ffff:")[1])\
-            .arg(currentclient->peerPort());
+    serverCurrentClient = server->nextPendingConnection();
+    serverClient.append(serverCurrentClient);
+    ui->allconnect->addItem(tr("%1:%2").arg(serverCurrentClient->peerAddress().toString().split("::ffff:")[1])\
+            .arg(serverCurrentClient->peerPort()));
+    QString msg2=QString("%1[%2:%3]").arg("IP").arg(serverCurrentClient->peerAddress().toString().split("::ffff:")[1])\
+            .arg(serverCurrentClient->peerPort());
     append(4,msg2);
 
-    connect(currentclient, SIGNAL(readyRead()), this, SLOT(server_read()));
-    connect(currentclient, SIGNAL(disconnected()), this, SLOT(disconnectedSlot()));
+    connect(serverCurrentClient, SIGNAL(readyRead()), this, SLOT(serverRead()));
+    connect(serverCurrentClient, SIGNAL(disconnected()), this, SLOT(disconnected()));
 }
 
 // disconnected -> disconnectedSlot 客户端断开连接的槽函数
-void TcpWidget::disconnectedSlot()
+void TcpWidget::disconnected()
 {
     //由于disconnected信号并未提供SocketDescriptor，所以需要遍历寻找
-    for(int i=0; i<client.length(); i++)
+    for(int i=0; i<serverClient.length(); i++)
     {
-        if(client[i]->state() == QAbstractSocket::UnconnectedState)
+        if(serverClient[i]->state() == QAbstractSocket::UnconnectedState)
         {
             // 删除存储在combox中的客户端信息
             ui->allconnect->removeItem(ui->allconnect->findText(tr("%1:%2")\
-                                                                .arg(client[i]->peerAddress().toString().split("::ffff:")[1])\
-                                       .arg(client[i]->peerPort())));
+                                                                .arg(serverClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                                       .arg(serverClient[i]->peerPort())));
             //
-            QString msg3=QString("%1[%2:%3]").arg("IP").arg(client[i]->peerAddress().toString().split("::ffff:")[1])\
-                    .arg(client[i]->peerPort());
+            QString msg3=QString("%1[%2:%3]").arg("IP").arg(serverClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                    .arg(serverClient[i]->peerPort());
             append(4,msg3);
             // 删除存储在tcpClient123列表中的客户端信息
-            client[i]->deleteLater();
-            client.removeAt(i);
+            serverClient[i]->deleteLater();
+            serverClient.removeAt(i);
         }
     }
 }
 
-void TcpWidget::ReadError(QAbstractSocket::SocketError)
+void TcpWidget::readError(QAbstractSocket::SocketError)
 {
-    tcpclient->disconnectFromHost();
+    client->disconnectFromHost();
     ui->listen->setText(tr("连接"));
     change(true);
-    timesend->stop();
+    sendTime->stop();
     ui->autosend->setChecked(false);
-    append(2,QString("failed to connect server because %1,Please Try Again").arg(tcpclient->errorString()));
+    append(2,QString("failed to connect server because %1,Please Try Again").arg(client->errorString()));
     append(2,"连接服务器失败，请重试!");
 }
 
 // 客户端数据可读信号，对应的读数据槽函数
-void TcpWidget::server_read()
+void TcpWidget::serverRead()
 {
     // 由于readyRead信号并未提供SocketDecriptor，所以需要遍历所有客户端
-    for(int i=0; i<client.length(); i++)
+    for(int i=0; i<serverClient.length(); i++)
     {
-        QByteArray data = client[i]->readAll();
+        QByteArray data = serverClient[i]->readAll();
         if(data.isEmpty())    continue;
 
         QString buffer;//储存数据
@@ -310,19 +310,19 @@ void TcpWidget::server_read()
         }
 
         static QString IP_Port;
-        IP_Port = tr("[%1:%2]:").arg(client[i]->peerAddress().toString().split("::ffff:")[1])\
-                .arg(client[i]->peerPort());
+        IP_Port = tr("[%1:%2]:").arg(serverClient[i]->peerAddress().toString().split("::ffff:")[1])\
+                .arg(serverClient[i]->peerPort());
 
         QString buffer1=QString("%1%2%3").arg("IP ").arg(IP_Port).arg(buffer);
 
         append(1, buffer1);
 
-        recvcount = recvcount + data.size();//接收数据计数
-        ui->recvcount->setText(QString("接收 : %1 字节").arg(recvcount));
+        recvCount = recvCount + data.size();//接收数据计数
+        ui->recvcount->setText(QString("接收 : %1 字节").arg(recvCount));
     }
 }
 
-void TcpWidget::senddata()
+void TcpWidget::sendData()
 {
     QString data = ui->senddata->toPlainText();
     if (data.isEmpty()) {
@@ -339,12 +339,12 @@ void TcpWidget::senddata()
         buffer=data.toUtf8();
     }
     append(0, data);
-    sendcount = sendcount + buffer.size();
-    ui->sendcount->setText(QString("发送 : %1 字节").arg(sendcount));
+    sendCount = sendCount + buffer.size();
+    ui->sendcount->setText(QString("发送 : %1 字节").arg(sendCount));
 
     if(ui->model->currentIndex()==0)
     {
-        if(client.length()==0)
+        if(serverClient.length()==0)
         {
             append(2,"当前无客户端在线，请停止发送数据,无效！");
             return;
@@ -352,8 +352,8 @@ void TcpWidget::senddata()
         //全部连接
         if(ui->allconnect->currentIndex() == 0)
         {
-            for(int i=0; i<client.length(); i++)
-                client[i]->write(buffer); //qt5除去了.toAscii()
+            for(int i=0; i<serverClient.length(); i++)
+                serverClient[i]->write(buffer); //qt5除去了.toAscii()
         }
         //指定连接
         else
@@ -362,12 +362,12 @@ void TcpWidget::senddata()
             int clientPort = ui->allconnect->currentText().split(":")[1].toInt();
             //        qDebug() << clientIP;
             //        qDebug() << clientPort;
-            for(int i=0; i<client.length(); i++)
+            for(int i=0; i<serverClient.length(); i++)
             {
-                if(client[i]->peerAddress().toString().split("::ffff:")[1]==clientIP\
-                        && client[i]->peerPort()==clientPort)
+                if(serverClient[i]->peerAddress().toString().split("::ffff:")[1]==clientIP\
+                        && serverClient[i]->peerPort()==clientPort)
                 {
-                    client[i]->write(buffer);
+                    serverClient[i]->write(buffer);
                     return; //ip:port唯一，无需继续检索
                 }
             }
@@ -375,13 +375,13 @@ void TcpWidget::senddata()
     }
     else if(ui->model->currentIndex()==1)
     {
-        tcpclient->write(buffer);
+        client->write(buffer);
     }
 }
 
-void TcpWidget::client_read()
+void TcpWidget::clientRead()
 {
-    QByteArray data = tcpclient->readAll();
+    QByteArray data = client->readAll();
     if(data.isEmpty())    return;
 
     QString buffer;//储存数据
@@ -393,24 +393,24 @@ void TcpWidget::client_read()
     }
     append(1, buffer);
 
-    recvcount = recvcount + data.size();//接收数据计数
-    ui->recvcount->setText(QString("接收 : %1 字节").arg(recvcount));
+    recvCount = recvCount + data.size();//接收数据计数
+    ui->recvcount->setText(QString("接收 : %1 字节").arg(recvCount));
 }
 
 void TcpWidget::on_autosend_stateChanged(int arg1)
 {
     if (arg1 == 0)
-        timesend->stop();
+        sendTime->stop();
     else
-        timesend->start();
+        sendTime->start();
 }
 
-void TcpWidget::autosendrestart()
+void TcpWidget::autoSendRestart()
 {
     if (ui->autosend->isChecked()){
-        timesend->stop();
-        timesend->setInterval(ui->autosendtime->currentText().toInt());
-        timesend->start();
+        sendTime->stop();
+        sendTime->setInterval(ui->autosendtime->currentText().toInt());
+        sendTime->start();
     }
 }
 
@@ -437,12 +437,12 @@ void TcpWidget::append(quint8 type, QString msg)
     ui->display->append(QString("时间[%1] %2 %3").arg(DATETIME).arg(str).arg(msg));
 }
 
-void TcpWidget::autoconnectrestart()
+void TcpWidget::autCconnectRestart()
 {
     if (ui->autoconnect->isChecked()){
-        timeconnect->stop();
-        timeconnect->setInterval(ui->autoconnecttime->currentText().toInt());
-        timeconnect->start();
+        timeConnect->stop();
+        timeConnect->setInterval(ui->autoconnecttime->currentText().toInt());
+        timeConnect->start();
     }
 }
 
@@ -450,7 +450,7 @@ void TcpWidget::on_autoconnect_stateChanged(int arg1)
 {
     if (arg1 == 0)
     {
-        timeconnect->stop();
+        timeConnect->stop();
         if(ui->listen->text()=="连接")
         {
             change(true);
@@ -462,7 +462,7 @@ void TcpWidget::on_autoconnect_stateChanged(int arg1)
     }
     else
     {
-        timeconnect->start();
+        timeConnect->start();
         ui->model->setEnabled(false);
         ui->ip->setEnabled(false);
         ui->port->setEnabled(false);
@@ -479,12 +479,12 @@ void TcpWidget::on_autoconnect_stateChanged(int arg1)
     }
 }
 
-void TcpWidget::connectrestart()
+void TcpWidget::connectRestart()
 {
     if(ui->listen->text()=="连接")
     {
-        tcpclient->connectToHost(ui->ip->text(), quint16(ui->port->text().toInt()));
-        if (tcpclient->waitForConnected(1000))  // 连接成功则进入if{}
+        client->connectToHost(ui->ip->text(), quint16(ui->port->text().toInt()));
+        if (client->waitForConnected(1000))  // 连接成功则进入if{}
         {
             ui->listen->setText("断开连接");
             change(false);
@@ -498,13 +498,13 @@ void TcpWidget::connectrestart()
 
 void TcpWidget::on_sendcount_clicked()
 {
-    sendcount = 0;
+    sendCount = 0;
     ui->sendcount->setText("发送 : 0 字节");
 }
 
 void TcpWidget::on_recvcount_clicked()
 {
-    recvcount = 0;
+    recvCount = 0;
     ui->recvcount->setText("接收 : 0 字节");
 }
 
@@ -546,21 +546,21 @@ void TcpWidget::on_savedata_clicked()
 void TcpWidget::on_cleardata_clicked()
 {
     ui->display->clear();
-    sendcount = 0;
+    sendCount = 0;
     ui->sendcount->setText("发送 : 0 字节");
-    recvcount = 0;
+    recvCount = 0;
     ui->recvcount->setText("接收 : 0 字节");
 }
 
-void TcpWidget::saveconfig()
+void TcpWidget::saveConfig()
 {
-    AppCfg::model=ui->model->currentText();
-    AppCfg::ip=ui->ip->text().toUtf8();
-    AppCfg::port=ui->port->text().toInt();
-    AppCfg::hexrecv=ui->hexrecv->isChecked();
-    AppCfg::hexsend=ui->hexsend->isChecked();
-    AppCfg::autosendtime=ui->autosendtime->currentText().toInt();
-    AppCfg::autoconnecttime=ui->autoconnecttime->currentText().toInt();
-    AppCfg::data=ui->senddata->toPlainText();
-    AppCfg::writeconfig();
+    AppCfg::tcpModel=ui->model->currentText();
+    AppCfg::tcpIp=ui->ip->text().toUtf8();
+    AppCfg::tcpPort=ui->port->text().toInt();
+    AppCfg::tcpHexRecv=ui->hexrecv->isChecked();
+    AppCfg::tcpHexSend=ui->hexsend->isChecked();
+    AppCfg::tcpAutoSendTime=ui->autosendtime->currentText().toInt();
+    AppCfg::tcpAutoConnectTime=ui->autoconnecttime->currentText().toInt();
+    AppCfg::tcpData=ui->senddata->toPlainText();
+    AppCfg::writeConfig();
 }
