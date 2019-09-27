@@ -1,5 +1,5 @@
 #include "ui/mainwindow.h"
-#include "helper/MyHelper.h"
+#include "helper/UiSet.h"
 
 #include <QApplication>
 
@@ -10,7 +10,7 @@ void set()
 
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    MyHelper::setQss(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+    UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
 }
 
 int main(int argc, char *argv[])
@@ -23,6 +23,8 @@ int main(int argc, char *argv[])
     set();
 
     MainWindow w;
+    //设置窗口大小
+    w.resize(1000,600);
     w.show();
     return a.exec();
 }

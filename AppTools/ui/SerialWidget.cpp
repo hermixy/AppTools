@@ -1,6 +1,6 @@
 ﻿#include "SerialWidget.h"
 #include "ui_SerialWidget.h"
-#include "helper/MyHelper.h"
+#include "helper/UiSet.h"
 #include "helper/BinaryCvn.h"
 #include "helper/AppCfg.h"
 #include <QSerialPortInfo>
@@ -13,7 +13,7 @@ SerialWidget::SerialWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    MyHelper::windowCenter(this);
+    UiSet::windowCenter(this);
     initData();
     initWindow();
     builtConnect();
@@ -125,7 +125,7 @@ void SerialWidget::builtConnect()
 
     connect(ui->savedatabtn,&QPushButton::clicked,this,[this]
     {
-        MyHelper::saveToFile(ui->display,this);
+        UiSet::saveToFile(ui->display,this);
     });
 }
 
@@ -203,7 +203,7 @@ void SerialWidget::readData()
         return;
     }
 
-    MyHelper::sleep(waitTime);
+    UiSet::sleep(waitTime);
     QByteArray data = mySerial->readAll();
     int dataLen = data.length();
 

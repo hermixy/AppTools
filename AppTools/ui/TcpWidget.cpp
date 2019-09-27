@@ -1,4 +1,4 @@
-﻿#include "helper/MyHelper.h"
+﻿#include "helper/UiSet.h"
 #include "helper/AppCfg.h"
 #include "TcpWidget.h"
 #include "ui_TcpWidget.h"
@@ -154,7 +154,7 @@ void TcpWidget::builtConnect()
 
     connect(ui->savedata,&QPushButton::clicked,[this]
     {
-        MyHelper::saveToFile(ui->display,this);
+        UiSet::saveToFile(ui->display,this);
     });
 }
 

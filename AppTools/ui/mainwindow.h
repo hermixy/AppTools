@@ -20,30 +20,24 @@ public:
 private slots:
     void setPaddingAndSpacing();
     void initWindow();
-    void setWidgetPaddingAndSpacing(QWidget *widget, int padding, int spacing);
     void titleBtn();
-    void createListWidgetBtnMenu();
-    void registerClass();
+    void createListWidgetBtnMenu();  
+
+    void on_listWidget_clicked(const QModelIndex &);
+    void createMenuMap(QString className);
+
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *);
 
-    void on_listWidget_clicked(const QModelIndex &);
-
 private:
     Ui::MainWindow *ui;
-
-    QListWidgetItem *tcpTool;
-    QListWidgetItem *serialTool;
-    QListWidgetItem *crcTool;
-    QListWidgetItem *floatTool;
-    QListWidgetItem *qssTool;
-
-    QWidget *myWidget;
     QSizeGrip *sizeGrip;
-
     //记录鼠标位置
     QPoint lastPoint;
     QPoint movePoint;
+
+    QMap<QString,QWidget*> menuMap;
+
 };
 #endif // MAINWINDOW_H

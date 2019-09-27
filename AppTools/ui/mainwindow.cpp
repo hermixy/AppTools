@@ -1,6 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "helper/MyHelper.h"
+#include "helper/UiSet.h"
 #include "SerialWidget.h"
 #include "TcpWidget.h"
 #include "CustomWidget.h"
@@ -10,7 +10,6 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
-    ,myWidget(nullptr)
     ,sizeGrip(nullptr)
 {
     ui->setupUi(this);
@@ -22,27 +21,20 @@ MainWindow::MainWindow(QWidget *parent)
     titleBtn();
 
     createListWidgetBtnMenu();
-    registerClass();
 }
 
 MainWindow::~MainWindow()
 {
     if(sizeGrip!=nullptr)
     {
-        delete sizeGrip;
-        sizeGrip=nullptr;
-    }
-    if(myWidget!=nullptr)
-    {
-        delete myWidget;
-        myWidget=nullptr;
+        sizeGrip->close();
     }
     delete ui;
 }
 
 void MainWindow::initWindow()
 {
-    MyHelper::windowCenter(this);
+    UiSet::windowCenter(this);
     setWindowTitle("AppTools");
 
     sizeGrip=new QSizeGrip(nullptr);
@@ -56,33 +48,22 @@ void MainWindow::initWindow()
     ui->labelicon->setPixmap(QPixmap((QString("%1/image/setting-icon-dark.png")\
                                       .arg(qApp->applicationDirPath()))));
 
+    QWidget *myWidget;
     myWidget=new CustomWidget(QString("你好呀!"),this);
     if(myWidget!=nullptr)
     {
         ui->stackedWidget->addWidget(myWidget);
         ui->stackedWidget->setCurrentWidget(myWidget);
-        //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
+        myWidget->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
 
 void MainWindow::setPaddingAndSpacing()
 {
-    setWidgetPaddingAndSpacing(ui->centralwidget,0,0);
-    setWidgetPaddingAndSpacing(ui->titlewidget,5,10);
-    setWidgetPaddingAndSpacing(ui->listWidget,0,0);
-    //setWidgetPaddingAndSpacing(ui->page,0,0);
-}
-
-void MainWindow::setWidgetPaddingAndSpacing(QWidget *widget, int padding, int spacing)
-{
-    // 设置 Widget 的 padding 和 spacing
-    QLayout *layout = widget->layout();
-
-    if (layout)
-    {
-        layout->setContentsMargins(padding, padding, padding, padding);
-        layout->setSpacing(spacing);
-    }
+    UiSet::setWidgetPaddingAndSpacing(this,0,0);
+    UiSet::setWidgetPaddingAndSpacing(ui->centralwidget,0,0);
+    UiSet::setWidgetPaddingAndSpacing(ui->titlewidget,5,10);
+    UiSet::setWidgetPaddingAndSpacing(ui->listWidget,0,0);
 }
 
 void MainWindow::titleBtn()
@@ -121,23 +102,26 @@ void MainWindow::titleBtn()
 
 void MainWindow::createListWidgetBtnMenu()
 {
+    ui->listWidget->clear();
     ui->listWidget->setFont(QFont("微软雅黑", 12, QFont::Normal, false));
-    ui->listWidget->setSpacing(5);
-    tcpTool=new QListWidgetItem(QString("TCP助手"),ui->listWidget);
-    tcpTool->setTextAlignment(Qt::AlignCenter);
-    serialTool=new QListWidgetItem(QString("串口助手"),ui->listWidget);
-    serialTool->setTextAlignment(Qt::AlignCenter);
-    floatTool=new QListWidgetItem(QString("浮点数转换助手"),ui->listWidget);
-    floatTool->setTextAlignment(Qt::AlignCenter);
-    crcTool=new QListWidgetItem(QString("CRC助手"),ui->listWidget);
-    crcTool->setTextAlignment(Qt::AlignCenter);
-    qssTool=new QListWidgetItem(QString("重新加载QSS"),ui->listWidget);
-    qssTool->setTextAlignment(Qt::AlignCenter);
-}
+    QStringList toolList;
+    toolList<<"TCP助手"<<"串口助手"<<"浮点数转换助手"<<"CRC助手"<<"重新加载QSS";
+    ui->listWidget->addItems(toolList);
+    for(int i=0;i<toolList.size();i++)
+        ui->listWidget->item(i)->setTextAlignment(Qt::AlignCenter);
 
-void MainWindow::registerClass()
-{
-    //qRegisterMetaType<serial>("serial");
+
+    //    QListWidgetItem *tool;
+    //    tool=new QListWidgetItem(QString("TCP助手"),ui->listWidget);
+    //    tool->setTextAlignment(Qt::AlignCenter);
+    //    tool=new QListWidgetItem(QString("串口助手"),ui->listWidget);
+    //    tool->setTextAlignment(Qt::AlignCenter);
+    //    tool=new QListWidgetItem(QString("浮点数转换助手"),ui->listWidget);
+    //    tool->setTextAlignment(Qt::AlignCenter);
+    //    tool=new QListWidgetItem(QString("CRC助手"),ui->listWidget);
+    //    tool->setTextAlignment(Qt::AlignCenter);
+    //    tool=new QListWidgetItem(QString("重新加载QSS"),ui->listWidget);
+    //    tool->setTextAlignment(Qt::AlignCenter);
 }
 
 void MainWindow::on_listWidget_clicked(const QModelIndex &)
@@ -147,15 +131,19 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
     //qDebug()<<className;
     if(className=="重新加载QSS")
     {
-        MyHelper::setQss(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+        UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
         qDebug()<<"重新加载QSS";
         return;
     }
-    if(myWidget!=nullptr)
-    {
-        delete myWidget;
-        myWidget=nullptr;
-    }
+    if(!menuMap.contains(className))
+        createMenuMap(className);
+    else
+        ui->stackedWidget->setCurrentWidget(menuMap.value(className));
+}
+
+void MainWindow::createMenuMap(QString className)
+{
+    QWidget *myWidget=nullptr;
     if(className=="串口助手")
         myWidget = new SerialWidget(this);
     else if(className=="TCP助手")
@@ -166,9 +154,10 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
         myWidget=new CrcWidget(this);
     if(myWidget!=nullptr)
     {
+        menuMap.insert(className,myWidget);
         ui->stackedWidget->addWidget(myWidget);
         ui->stackedWidget->setCurrentWidget(myWidget);
-        //Frm->setAttribute(Qt::WA_DeleteOnClose,true);
+        myWidget->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
 
