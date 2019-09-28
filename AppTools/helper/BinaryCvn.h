@@ -1,9 +1,7 @@
 ﻿#ifndef BINARYCVN_H
 #define BINARYCVN_H
 
-#include <QtCore>
-#include <QtGui>
-#include <QtWidgets>
+#include <QObject>
 
 class BinaryCvn: public QObject
 {

@@ -1,23 +1,54 @@
 ﻿#include "UiSet.h"
+#include "Json.h"
 
 void UiSet::setUTF8Code()
 {
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
 }
 
-void UiSet::setQSS(QString qssfile)
+void UiSet::setQSS()
 {
-    QFile file(qssfile);
-    if (file.open(QFile::ReadOnly))
+    Json *json=new Json(QString("%1/cfg/config.json").arg(qApp->applicationDirPath()));
+    QStringList qssPath=json->getJsonArray("qss_files");
+    QString qss;
+    for (const QString &path : qssPath)
     {
-        QString qss = QLatin1String(file.readAll());
-        if(qss.isEmpty())
-            qDebug()<<qss;
-        qApp->setStyleSheet(qss);
+        qDebug()<<QString("Loading QSS file: %1").arg(path);
+        QFile file(path);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QString qssError;
+            qssError=QString("Cannot open the file: %1").arg(path);
+            qDebug()<<qssError;
+            qDebug()<<file.errorString();
+            continue;
+        }
+        QString qss_ = QLatin1String(file.readAll());
+        qss.append(qss_).append("\n");
         file.close();
     }
-    else
-        qDebug()<<"qss error";
+    delete json;
+    json=nullptr;
+    if(!qss.isEmpty())
+        qApp->setStyleSheet(qss);
+}
+
+//void UiSet::setQSS(QString qssPath)   //必须使用绝对路径
+void UiSet::setQSS(const QString &qssPath)
+{
+    qDebug()<<QString("Loading QSS file: %1").arg(qssPath);
+    QFile file(qssPath);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QString qssError;
+        qssError=QString("Cannot open the file: %1").arg(qssPath);
+        qDebug()<<qssError;
+        qDebug()<<file.errorString();
+        return;
+    }
+    QString qss = QLatin1String(file.readAll());
+    file.close();
+    qApp->setStyleSheet(qss);
 }
 
 void UiSet::setWidgetPaddingAndSpacing(QWidget *widget, int padding, int spacing)

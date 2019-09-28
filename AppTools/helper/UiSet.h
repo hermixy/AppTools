@@ -1,6 +1,4 @@
-﻿#include <QtCore>
-#include <QtGui>
-#include <QtWidgets>
+﻿#include <QtWidgets>
 
 #pragma execution_character_set("utf-8")
 
@@ -24,22 +22,23 @@ public:
     static void setUTF8Code();
 
     //设置QSS
-    static void setQSS(QString qssfile);
+    static void setQSS();
+    static void setQSS(const QString &qssPath);
 
     // 设置 widget 的 padding 和 spacing
     static void setWidgetPaddingAndSpacing(QWidget *widget, int padding, int spacing);
 
-    //延时
-    static void sleep(int sec);
-
     //窗体居中显示
     static void windowCenter(QWidget *window);
+
+    //延时
+    static void sleep(int sec);
 
     //保存txt到本地
     static void saveToFile(QTextBrowser *txt,QWidget *t);
 
     //显示消息
-    static void append(QString msg,QTextBrowser *txt);
+    static void append(QString msg,QTextBrowser *txt);   
 };
 
 #endif // UISET_H

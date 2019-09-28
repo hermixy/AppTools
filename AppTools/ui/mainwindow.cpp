@@ -131,7 +131,8 @@ void MainWindow::on_listWidget_clicked(const QModelIndex &)
     //qDebug()<<className;
     if(className=="重新加载QSS")
     {
-        UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+        //UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+        UiSet::setQSS();
         qDebug()<<"重新加载QSS";
         return;
     }

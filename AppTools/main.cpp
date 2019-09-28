@@ -10,7 +10,9 @@ void set()
 
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
-    UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+    //UiSet::setQSS(QString("%1/qss/mac.css").arg(qApp->applicationDirPath()));
+    //UiSet::setQSS("qss/mac.css");
+    UiSet::setQSS();
 }
 
 int main(int argc, char *argv[])

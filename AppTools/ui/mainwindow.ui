@@ -26,6 +26,13 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="hidebtn">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="maxbtn">
          <property name="text">
           <string/>
@@ -34,13 +41,6 @@
        </item>
        <item>
         <widget class="QPushButton" name="minbtn">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="hidebtn">
          <property name="text">
           <string/>
          </property>

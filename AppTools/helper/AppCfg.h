@@ -1,7 +1,7 @@
 ﻿#ifndef APPCFG_H
 #define APPCFG_H
 
-class QString;
+#include <QString>
 
 class AppCfg
 {

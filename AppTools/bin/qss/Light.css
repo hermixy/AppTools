@@ -13,65 +13,6 @@ QPushButton:hover{
 	background-color: #0066ff;
 }
 
-#titlewidget{
-	border-color:black;
-	background: white;
-}
-
-#titlewidget QPushButton {
-    width:  16px;
-    height: 16px;
-    min-width:  16px;
-    max-width:  16px;
-    min-height: 16px;
-    max-height: 16px;
-    border-width: 0;
-}
-
-#titlewidget QPushButton:hover{
-	background-color: #ffffff;
-}
-
-#titlewidget #closebtn {
-    border-image: url(image/titlebutton-close.png);
-}
-#titlewidget #closebtn:hover {
-    border-image: url(image/titlebutton-close-active.png);
-}
-#titlewidget #closebtn:pressed {
-    border-image: url(image/titlebutton-close-alt.png);
-}
-
-#titlewidget #hidebtn {
-    border-image: url(image/titlebutton-minimize.png);
-}
-#titlewidget #hidebtn:hover {
-    border-image: url(image/titlebutton-minimize-active.png);
-}
-#titlewidget #hidebtn:pressed {
-    border-image: url(image/titlebutton-minimize-alt.png);
-}
-
-#titlewidget #minbtn {
-    border-image: url(image/titlebutton-restore.png);
-}
-#titlewidget #minbtn:hover {
-    border-image: url(image/titlebutton-restore-active.png);
-}
-#titlewidget #minbtn:pressed {
-    border-image: url(image/titlebutton-restore-alt.png);
-}
-
-#titlewidget #maxbtn {
-    border-image: url(image/titlebutton-maximize.png);
-}
-#titlewidget #maxbtn:hover {
-    border-image: url(image/titlebutton-maximize-active.png);
-}
-#titlewidget #maxbtn:pressed {
-    border-image: url(image/titlebutton-maximize-alt.png);
-}
-
 QStackedWidget{
 	background-color:#eeeeee;
 	padding:0;
