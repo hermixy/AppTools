@@ -1,8 +1,9 @@
 ﻿#include "SerialWidget.h"
 #include "ui_SerialWidget.h"
-#include "helper/UiSet.h"
-#include "helper/BinaryCvn.h"
-#include "helper/AppCfg.h"
+#include "../help/UiSet.h"
+#include "../help/BinaryCvn.h"
+#include "../help/AppCfg.h"
+
 #include <QSerialPortInfo>
 
 #pragma execution_character_set("utf-8")

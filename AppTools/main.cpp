@@ -1,5 +1,5 @@
 #include "ui/mainwindow.h"
-#include "helper/UiSet.h"
+#include "help/UiSet.h"
 
 #include <QApplication>
 

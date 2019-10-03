@@ -1,6 +1,6 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "helper/UiSet.h"
+#include "../help/UiSet.h"
 #include "SerialWidget.h"
 #include "TcpWidget.h"
 #include "CustomWidget.h"
@@ -109,7 +109,6 @@ void MainWindow::createListWidgetBtnMenu()
     ui->listWidget->addItems(toolList);
     for(int i=0;i<toolList.size();i++)
         ui->listWidget->item(i)->setTextAlignment(Qt::AlignCenter);
-
 
     //    QListWidgetItem *tool;
     //    tool=new QListWidgetItem(QString("TCP助手"),ui->listWidget);

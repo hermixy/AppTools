@@ -15,6 +15,9 @@ public:
     explicit CrcWidget(QWidget *parent = nullptr);
     ~CrcWidget();
 
+private slots:
+    void on_calculate_clicked();
+
 private:
     Ui::CrcWidget *ui;
 };

@@ -36,7 +36,7 @@ MOC_DIR     = $$output
 RCC_DIR     = $$output
 UI_DIR      = $$output
 
-include(helper/helper.pri)
+include(help/help.pri)
 include(ui/ui.pri)
 
 SOURCES += \

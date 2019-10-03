@@ -1,8 +1,8 @@
-﻿#include "helper/UiSet.h"
-#include "helper/AppCfg.h"
-#include "TcpWidget.h"
+﻿#include "TcpWidget.h"
 #include "ui_TcpWidget.h"
-#include "helper/BinaryCvn.h"
+#include "../help/BinaryCvn.h"
+#include "../help/UiSet.h"
+#include "../help/AppCfg.h"
 
 #include <QNetworkInterface>
 #include <QTcpSocket>

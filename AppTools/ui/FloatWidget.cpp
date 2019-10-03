@@ -1,6 +1,6 @@
 #include "FloatWidget.h"
 #include "ui_FloatWidget.h"
-#include "helper/BinaryCvn.h"
+#include "../help/BinaryCvn.h"
 
 FloatWidget::FloatWidget(QWidget *parent) :
     QWidget(parent),
@@ -36,8 +36,7 @@ void FloatWidget::on_convFlaot_clicked()
         return;
     }
     QString h=ui->HexLine->text();
-    QByteArray buffer;
-    buffer=BinaryCvn::hexStrToByteArray(h);
+    QByteArray buffer=BinaryCvn::hexStrToByteArray(h);
     unsigned char buf[4];
     for(int i=0;i<4;i++)
     {
