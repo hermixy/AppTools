@@ -6,6 +6,8 @@ CustomWidget::CustomWidget(QString s,QWidget *parent) :
     ui(new Ui::CustomWidget)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
+    setAttribute(Qt::WA_StyledBackground);
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
     ui->label->setFont(QFont("微软雅黑", 28, QFont::Bold, false));
     //ui->label->setStyleSheet("color:blue;");

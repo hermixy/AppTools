@@ -13,6 +13,10 @@ QPushButton:hover{
 	background-color: #0066ff;
 }
 
+QPushButton:focus {
+    border-color: #57a3f3;
+}
+
 QStackedWidget{
 	background-color:#eeeeee;
 	padding:0;

@@ -13,8 +13,9 @@ SerialWidget::SerialWidget(QWidget *parent) :
     ui(new Ui::SerialWidget)
 {
     ui->setupUi(this);
-
-    UiSet::windowCenter(this);
+    setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
+    setAttribute(Qt::WA_StyledBackground);
+    //UiSet::windowCenter(this);
     initData();
     initWindow();
     builtConnect();

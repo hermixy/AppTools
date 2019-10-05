@@ -1,0 +1,27 @@
+LoginWidget {
+    background: white;
+    min-height: 350px;
+    min-width:  240px;
+    border-radius: 10px;
+}
+
+LoginWidget #picture{
+	border: 2px solid gray;
+    min-width:  160px;
+    max-width:  160px;
+    min-height: 160px;
+    max-height: 160px;
+    border-width: 0 0 0 0;
+	border-image: url(image/login.png)
+}
+
+LoginWidget #jusername,LoginWidget #kpassword{
+    min-width: 160px;
+    min-height: 30px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+LoginWidget #loginbtn {
+    height: 30px;
+}

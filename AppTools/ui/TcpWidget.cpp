@@ -7,15 +7,15 @@
 #include <QNetworkInterface>
 #include <QTcpSocket>
 
-#ifdef Q_OS_WIN
 #pragma execution_character_set("utf-8")
-#endif
 
 TcpWidget::TcpWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::TcpWidget)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
+    setAttribute(Qt::WA_StyledBackground);
     server = new QTcpServer(this);
     client = new QTcpSocket(this);   //实例化tcpClient
     initWindow();

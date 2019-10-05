@@ -17,6 +17,10 @@
 	background-color: #ffffff;
 }
 
+#titlewidget QPushButton:focus {
+    border-color: #57a3f3;
+}
+
 #titlewidget #closebtn {
     border-image: url(image/titlebutton-close.png);
 }
@@ -55,4 +59,15 @@
 }
 #titlewidget #maxbtn:pressed {
     border-image: url(image/titlebutton-maximize-alt.png);
+}
+
+/******************************************************************************/
+#titlewidget #labelicon{
+	border: 2px solid gray;
+	min-width: 30px;
+    max-width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    border-width: 0 0 0 0;	
+	border-image: url(image/setting-icon-dark2.png)
 }

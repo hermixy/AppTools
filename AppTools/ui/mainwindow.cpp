@@ -34,6 +34,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initWindow()
 {
+    this->resize(1000,600);
     UiSet::windowCenter(this);
     setWindowTitle("AppTools");
 
@@ -45,8 +46,8 @@ void MainWindow::initWindow()
     ui->label->setFont(QFont("微软雅黑", 14, QFont::Normal, false));
     ui->label->setAlignment(Qt::AlignCenter);
     ui->label->setText("AppTools");
-    ui->labelicon->setPixmap(QPixmap((QString("%1/image/setting-icon-dark.png")\
-                                      .arg(qApp->applicationDirPath()))));
+    //ui->labelicon->setPixmap(QPixmap((QString("%1/image/setting-icon-dark.png")\
+    //                                  .arg(qApp->applicationDirPath()))));
 
     QWidget *myWidget;
     myWidget=new CustomWidget(QString("你好呀!"),this);

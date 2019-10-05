@@ -11,13 +11,15 @@ CrcWidget::CrcWidget(QWidget *parent) :
     ui(new Ui::CrcWidget)
 {
     ui->setupUi(this);
+    setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
+    setAttribute(Qt::WA_StyledBackground);
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
     QStringList comBoxItems;
     comBoxItems<<"CRC_modbus";
     ui->modelcbx->addItems(comBoxItems);
     ui->modelcbx->setCurrentIndex(0);
     QString crcLable;
-    crcLable="Instruction\n\nName:CRC_modbus\n\nWidth:16\n\nPoly:0x8005\n\nInit:0xFFFF";
+    crcLable="Name:CRC_modbus\n\nWidth:16\n\nPoly:0x8005\n\nInit:0xFFFF";
     ui->label->setText(crcLable);
 }
 
@@ -32,8 +34,7 @@ void CrcWidget::on_calculate_clicked()
     QString data=ui->data->toPlainText();
     if(data.isEmpty())
     {
-        QMessageBox::warning(this, "警告", "请输入需要计算的CRC数据",
-                             QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        QMessageBox::warning(this, "警告", "请输入需要计算的CRC数据",QMessageBox::Ok);
         return;
     }
     QByteArray buffer=BinaryCvn::hexStrToByteArray(data);

@@ -7,7 +7,8 @@ FloatWidget::FloatWidget(QWidget *parent) :
     ui(new Ui::FloatWidget)
 {
     ui->setupUi(this);
-
+    setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
+    setAttribute(Qt::WA_StyledBackground);
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 }
 

@@ -1,5 +1,6 @@
 #include "ui/mainwindow.h"
 #include "help/UiSet.h"
+#include "ui/LoginWidget.h"
 
 #include <QApplication>
 
@@ -24,9 +25,8 @@ int main(int argc, char *argv[])
 
     set();
 
-    MainWindow w;
-    //设置窗口大小
-    w.resize(1000,600);
+    //MainWindow w;
+    LoginWidget w;
     w.show();
     return a.exec();
 }

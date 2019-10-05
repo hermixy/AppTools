@@ -1,6 +1,7 @@
 {
 	"qss_files": [
         "qss/Light.css",
-		"qss/MacTitleBtn.css"
+		"qss/MacTitleBtn.css",
+		"qss/LoginWidget.css"
     ]
 }
