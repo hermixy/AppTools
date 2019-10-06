@@ -109,7 +109,7 @@ void MainWindow::createListWidgetBtnMenu()
     QStringList toolList;
     toolList<<"TCP助手"<<"串口助手"<<"浮点数转换助手"<<"CRC助手"<<"重新加载QSS";
     ui->listWidget->addItems(toolList);
-    for(int i=0;i<toolList.size();i++)      
+    for(int i=0;i<toolList.size();i++)
         ui->listWidget->item(i)->setTextAlignment(Qt::AlignCenter);
 
 

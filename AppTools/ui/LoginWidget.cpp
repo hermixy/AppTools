@@ -3,6 +3,8 @@
 #include "../help/UiSet.h"
 #include "mainwindow.h"
 
+#pragma execution_character_set("utf-8")
+
 LoginWidget::LoginWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LoginWidget)
@@ -10,11 +12,12 @@ LoginWidget::LoginWidget(QWidget *parent) :
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
     setAttribute(Qt::WA_StyledBackground);
+    UiSet::windowCenter(this);
 
     ui->picture->setText("");
 
-    ui->jusername->setPlaceholderText("用户名");
-    ui->kpassword->setPlaceholderText("密码");
+    ui->jusername->setPlaceholderText("用户名：admin");
+    ui->kpassword->setPlaceholderText("密码：admin");
     ui->kpassword->setEchoMode(QLineEdit::Password);
 
     UiSet::setWidgetPaddingAndSpacing(this,5,20);
