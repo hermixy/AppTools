@@ -68,7 +68,7 @@ void TcpWidget::initWindow()
     QApplication::setFont(QFont ("微软雅黑", 10, QFont::Normal, false));
 
     AppCfg::readConfig();                          //读取配置
-    ui->model->findText(AppCfg::tcpModel);
+    ui->model->setCurrentIndex(ui->model->findText(AppCfg::tcpModel));
     ui->ip->setText(AppCfg::tcpIp);
     ui->port->setText(QString::number(AppCfg::tcpPort));
     ui->hexrecv->setChecked(AppCfg::tcpHexRecv);

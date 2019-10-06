@@ -104,12 +104,14 @@ void MainWindow::titleBtn()
 void MainWindow::createListWidgetBtnMenu()
 {
     ui->listWidget->clear();
-    ui->listWidget->setFont(QFont("微软雅黑", 12, QFont::Normal, false));
+    ui->listWidget->setFocusPolicy(Qt::NoFocus);    //去除选中虚线框
+    //ui->listWidget->setFont(QFont("微软雅黑", 12, QFont::Normal, false));
     QStringList toolList;
     toolList<<"TCP助手"<<"串口助手"<<"浮点数转换助手"<<"CRC助手"<<"重新加载QSS";
     ui->listWidget->addItems(toolList);
-    for(int i=0;i<toolList.size();i++)
+    for(int i=0;i<toolList.size();i++)      
         ui->listWidget->item(i)->setTextAlignment(Qt::AlignCenter);
+
 
     //    QListWidgetItem *tool;
     //    tool=new QListWidgetItem(QString("TCP助手"),ui->listWidget);

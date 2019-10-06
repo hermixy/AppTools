@@ -29,6 +29,8 @@ LoginWidget::LoginWidget(QWidget *parent) :
         this->showMinimized();
     });
 
+    ui->loginbtn->setShortcut(Qt::Key_Enter);   //登录快捷键回车
+
     // 输入密码后按下回车进行登陆
     connect(ui->kpassword, &QLineEdit::returnPressed, [this] {
         ui->loginbtn->click();
