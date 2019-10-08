@@ -59,7 +59,10 @@ void LoginWidget::on_loginbtn_clicked()
         MainWindow *mainw=new MainWindow();
         this->hide();
         mainw->show();
-        this->close();
+        //this->close();//这样会出现新的窗口无法析构
+        //只有在 main函数中定义并show的窗口才是主窗口
+        //fix me?
+        mainw->setAttribute(Qt::WA_DeleteOnClose,true);
     }
 }
 

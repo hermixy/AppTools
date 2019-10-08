@@ -6,12 +6,13 @@
 #include "CustomWidget.h"
 #include "FloatWidget.h"
 #include "CrcWidget.h"
+#include "LoginWidget.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
     ,sizeGrip(nullptr)
-{
+{    
     ui->setupUi(this);
     setWindowFlags(Qt::FramelessWindowHint);   //去掉边框
     setAttribute(Qt::WA_StyledBackground);
@@ -69,6 +70,10 @@ void MainWindow::setPaddingAndSpacing()
 
 void MainWindow::titleBtn()
 {
+    ui->closebtn->setToolTip("关闭");
+    ui->hidebtn->setToolTip("最小化");
+    ui->maxbtn->setToolTip("最大化");
+    ui->minbtn->setToolTip("缩小窗口");
     if(!this->isMaximized())
     {
         ui->minbtn->hide();
@@ -79,9 +84,10 @@ void MainWindow::titleBtn()
         ui->maxbtn->hide();
         ui->minbtn->show();
     }
-    connect(ui->closebtn,&QPushButton::clicked,[]
+    connect(ui->closebtn,&QPushButton::clicked,[this]
     {
-        QApplication::quit();
+        this->close();
+        //QApplication::quit();
     });
     connect(ui->hidebtn,&QPushButton::clicked,[this]
     {
